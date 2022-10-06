@@ -1,0 +1,25 @@
+.banner{
+  position: relative;
+  background-position: 0 -120px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 500px;
+  background-image: url("../../assets/img/bank-tree.jpeg");
+  &__content{
+	box-sizing: content-box;
+	background: #fff;
+	padding: 3.2rem;
+	position: absolute;
+	right: 7%;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 300px;
+	>h2{
+	  font-size: 2.4rem;
+	}
+	>p{
+	  font-size: 1.6rem;
+	  margin-top: 2rem;
+	}
+  }
+}
