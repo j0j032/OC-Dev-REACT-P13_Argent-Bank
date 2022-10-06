@@ -4,17 +4,15 @@ import Footer from '../Footer/Footer'
 import BannerLanding from '../BannerLanding/BannerLanding'
 import Argument from '../Argument/Argument'
 
+
 const LandingPage = () => {
+	
 	return (
 		<>
 		<Header/>
 		<main>
 			<BannerLanding/>
-			<div className='arguments-container'>
-				<Argument/>
-				<Argument/>
-				<Argument/>
-			</div>
+			<Argument/>
 		</main>
 		<Footer/>
 		</>

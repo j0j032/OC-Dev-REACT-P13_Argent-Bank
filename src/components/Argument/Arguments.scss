@@ -1,0 +1,30 @@
+.features-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 3%;
+  padding: 4rem;
+}
+
+.feature{
+  &__item{
+	margin-top: 3.2rem;
+	text-align: center;
+	width: 30%;
+	>h3{
+	  margin-top: 2rem;
+	  font-size: 2.4rem;
+	}
+	>p{
+	  font-size: 1.6rem;
+	  margin-top: 2rem;
+	}
+  }
+  &__icon{
+	box-sizing: content-box;
+	width: 100px;
+	border: solid 10px $green;
+	border-radius: 100px;
+	padding: 2rem;
+  }
+}
