@@ -8,16 +8,16 @@
 
 // Mobile 720
 @mixin mobile{
-  $breakpoints:(mobile:720px);
-  @media screen and (min-width:map-get($breakpoints, mobile)) {
+  $breakpoints:(mobile:780px);
+  @media screen and (max-width:map-get($breakpoints, mobile)) {
 	@content;
   }
 }
 
 // Tablet 920
 @mixin tablet{
-  $breakpoints:(tablet:920px);
-  @media screen and (min-width:map-get($breakpoints, tablet)) {
+  $breakpoints:(tablet:930px);
+  @media screen and (max-width:map-get($breakpoints, tablet)) {
 	@content;
   }
 }
