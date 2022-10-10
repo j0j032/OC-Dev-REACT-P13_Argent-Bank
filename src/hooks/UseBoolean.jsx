@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import {useState} from 'react'
 
 const UseBoolean = (initialState = false) => {
 	const [state, setState] = useState(initialState)

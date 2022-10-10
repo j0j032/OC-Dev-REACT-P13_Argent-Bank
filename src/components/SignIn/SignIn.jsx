@@ -1,15 +1,28 @@
-import React, {useState} from 'react'
+import React, {useRef, useState} from 'react'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
 import {useNavigate} from 'react-router-dom'
-import useBoolean from '../../customHooks/UseBoolean'
+import useBoolean from '../../hooks/UseBoolean'
+import {useQuery} from 'react-query'
+import {logIn} from '../../apiHandler'
 
 const SignIn = () => {
 	const [isToggle, {setToggle}] = useBoolean(false)
-	
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('')
 	const navigateTo = useNavigate()
-	const handleSubmit = e => {
+	
+	const tony = {email: 'tony@stark.com', password: 'password123'}
+	
+	
+	const queryKey = ['signIn']
+	const {data, isLoading, error} = useQuery(queryKey,()=>logIn(email,password))
+	
+	
+	
+	const handleSubmit = (e) => {
 		e.preventDefault()
+		
 		// Auth Logic
 		// Remember LOGIC
 		navigateTo('/profile')
@@ -25,12 +38,12 @@ const SignIn = () => {
 					<form className='signin__form'
 					      onSubmit={(e)=>handleSubmit(e)}>
 						<div className='input__wrapper'>
-							<label htmlFor='username'>Username</label>
-							<input type='text' id='username'/>
+							<label htmlFor='email'>Email</label>
+							<input onChange={(e)=>setEmail(e.target.value)} type='email' id='email'/>
 						</div>
 						<div className='input__wrapper'>
 							<label htmlFor='password'>Password</label>
-							<input type='password' id='password'/>
+							<input onChange={(e)=>setPassword(e.target.value)} type='password' id='password'/>
 						</div>
 						<div className='input__remember'>
 							<input onClick={setToggle} defaultChecked={isToggle} type='checkbox' id='remember-me'/>
