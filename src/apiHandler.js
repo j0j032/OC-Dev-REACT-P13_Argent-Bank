@@ -3,13 +3,10 @@ import axios from 'axios'
 const api = axios.create({
 	baseURL: 'http://localhost:3001/api/v1',
 	timeout : 5000,
-	headers:{
-		Authorization: 'Bearer secret',
-	}
 })
 
 export function logIn(email, password){
-	return api.post('/user/login', {email,password}).then(res=>console.log(res.data.body.token))
+	return api.post('/user/login', {email,password}).then(res=> res.data.body.token)
 }
 
 export function signUp(email,password,firstName,lastName){
@@ -17,7 +14,7 @@ export function signUp(email,password,firstName,lastName){
 }
 
 export function fetchUserProfile(token){
-	return api.post('/user/profile', {token}).then(res=>console.log(res))
+	return api.post('/user/profile', {},{headers: {"Authorization" : `Bearer ${token}`}}).then(res=>res.data.body)
 }
 
 export function updateUserProfile({firstName, lastName}){

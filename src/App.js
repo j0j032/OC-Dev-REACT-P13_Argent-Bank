@@ -11,7 +11,7 @@ const App = () => {
             <Routes>
                 <Route path='/' element={<LandingPage/>}/>
                 <Route path='/signin' element={<SignIn/>}/>
-                <Route path='/profile' element={<ProfilePage/>}/>
+                <Route path='/profile/:token' element={<ProfilePage/>}/>
                 <Route path='*' element={<Error404/>}/>
             </Routes>
         </BrowserRouter>

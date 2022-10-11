@@ -1,9 +1,16 @@
 import React from 'react'
+import {useQuery} from 'react-query'
+import {fetchUserProfile} from '../../apiHandler'
+import {useParams} from 'react-router-dom'
 
 const ProfilePage = () => {
-	return (
+	const {token} = useParams()
+	const queryKey = ['fetchUserProfile']
+	const {data, isLoading} = useQuery(queryKey,()=>fetchUserProfile(token))
+	
+	return isLoading? (<h1>IS LOADING...</h1>):(
 		<div>
-			PROFILE
+			Hello {data.firstName}
 		</div>
 	)
 }

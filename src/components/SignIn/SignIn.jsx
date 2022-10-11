@@ -16,16 +16,18 @@ const SignIn = () => {
 	
 	
 	const queryKey = ['signIn']
-	const {data, isLoading, error} = useQuery(queryKey,()=>logIn(email,password))
+	const {refetch} = useQuery(queryKey,()=>logIn(email,password),{
+		enabled:false
+	})
 	
 	
+	const redirect = (data) => {
+		navigateTo(`/profile/${data}`)
+	}
 	
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault()
-		
-		// Auth Logic
-		// Remember LOGIC
-		navigateTo('/profile')
+		 await refetch().then(res=>redirect(res.data))
 	}
 	
 	return (
