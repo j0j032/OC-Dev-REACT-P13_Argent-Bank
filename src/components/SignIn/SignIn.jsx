@@ -16,13 +16,13 @@ const SignIn = () => {
 	
 	
 	const queryKey = ['signIn']
-	const {refetch} = useQuery(queryKey,()=>logIn(email,password),{
+	const {data:jwt, refetch, error} = useQuery(queryKey,()=>logIn(email,password),{
 		enabled:false
 	})
 	
 	
 	const redirect = (data) => {
-		navigateTo(`/profile/${data}`)
+		jwt? navigateTo(`/profile/${data}`) : navigateTo('/signin')
 	}
 	
 	const handleSubmit = async (e) => {
