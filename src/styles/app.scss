@@ -1,14 +1,19 @@
 html {
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-size: 62.5%;
+  color: $dark-green;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: $dark-green;
-  font-size: 62.5%;
 }
 
-body {
-  margin: 0;
+#root {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  font-size: 1.6rem;
+  height: 100vh;
+  margin: 0;
+}
+
+main {
+  flex-grow: 1;
 }
