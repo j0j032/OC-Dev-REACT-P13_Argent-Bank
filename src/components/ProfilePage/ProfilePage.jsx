@@ -19,23 +19,22 @@ const ProfilePage = () => {
 		refetchOnmount: false,
 		refetchOnReconnect: false
 	})
-	console.log(user)
 	
-	const transactions = [
+	const accounts = [
 		{
-			type: 'Argent Bank Checking (x8349)',
+			title: 'Checking (x8349)',
 			amount: '2,082.79',
-			balance: 'Available'
+			description: 'Available'
 		},
 		{
-			type: 'Argent Bank Savings (x6712)',
+			title: 'Savings (x6712)',
 			amount: '10,928.42',
-			balance: 'Available'
+			description: 'Available'
 		},
 		{
-			type: 'Argent Bank Checking (x8349)',
+			title: 'Checking (x8349)',
 			amount: '184.30',
-			balance: 'Current'
+			description: 'Current'
 		}
 	]
 	
@@ -46,25 +45,28 @@ const ProfilePage = () => {
 					<Header user={user.firstName}/>
 					<main className='profile__mainContainer'>
 						<div className='profile__header'>
-							<h1>Welcome back <br/>{user.firstName + user.lastName}</h1>
+							<h1>Welcome back <br/>{`${user.firstName} ${user.lastName} !`}</h1>
 							<button className='profile__btn'>Edit Name</button>
 						</div>
-						{
-							transactions.map((transaction, i) => (
-								<div key={i} className='profile__transactionCtn'>
-									<div>
-										<p>{transaction.type}</p>
-										<p>{transaction.amount}</p>
-										<p>{transaction.balance}</p>
+						<section className='profile__accounts'>
+							{
+								accounts.map((account, i) => (
+									<div key={i} className='profile__account-card'>
+										<div className='account'>
+											<h3 className='account__title'>{`Argent Bank ${account.title}`}</h3>
+											<p className='account__amount'>{`$${account.amount}`}</p>
+											<p className='account__description'>{`${account.description} Balance`}</p>
+										</div>
+										<button className='profile__btn account__btn'>
+											View transactions
+										</button>
 									</div>
-									<button className='profile__btn'>View transactions</button>
-								</div>
-							))
-						}
+								))
+							}
+						</section>
 					</main>
 				</>
 			)}
-			
 			<Footer/>
 		</>
 	)
