@@ -22,7 +22,7 @@ const App = () => {
 				
 				{/*Private*/}
 				<Route element={<RequireAuth/>}>
-					<Route path='/profile' element={<ProfilePage/>}/>
+					<Route path='/profile/:id' element={<ProfilePage/>}/>
 				</Route>
 				
 				{/*CatchAll*/}

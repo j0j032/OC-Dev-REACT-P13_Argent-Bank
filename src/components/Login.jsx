@@ -3,11 +3,12 @@ import Header from './Header/Header'
 import Footer from './Footer/Footer'
 import useBoolean from '../hooks/UseBoolean'
 import {useQuery} from 'react-query'
-import {logIn} from '../apiHandler'
+import {fetchUserProfile, logIn} from '../apiHandler'
 import useAuth from '../hooks/useAuth'
 import {useNavigate} from 'react-router-dom'
 
 const Login = () => {
+	
 	const {setAuth} = useAuth()
 	const navigate = useNavigate()
 	const userRef = useRef()
@@ -25,24 +26,27 @@ const Login = () => {
 		setErrMsg('')
 	}, [email, pwd])
 	
-	const queryKey = ['signIn', email, pwd]
-	const query = useQuery(queryKey, () => logIn(email, pwd), {
-		staleTime: 60_000
+	const loginQueryKey = ['signIn', email, pwd]
+	const loginQuery = useQuery(loginQueryKey, () => logIn(email, pwd), {
+		staleTime: 5_000
 	})
-	console.log(query.isLoading, query.isFetching)
-	console.log(query.error)
+	
+	const userProfileQueryKey = ['fetchUserProfile', loginQuery.data]
+	const userProfileQuery = useQuery(userProfileQueryKey, () => fetchUserProfile(loginQuery.data || localStorage.getItem('accessToken')))
+	
 	
 	const handleSubmit = async (e) => {
 		e.preventDefault()
-		if (query.data) {
-			setAuth({email, pwd, token: query.data}) // Store in auth object and save in global context
+		if (loginQuery.data) {
+			localStorage.setItem('accessToken', loginQuery.data)
+			setAuth({email, pwd, token: loginQuery.data, id: userProfileQuery.data.id})
 			setEmail('')
 			setPwd('')
-			navigate('/profile')
+			navigate(`/profile/${userProfileQuery.data.id}`)
 		} else {
 			setErrMsg('Identifiants incorrects')
 		}
-		console.log(query)
+		console.log(loginQuery)
 	}
 	
 	return (

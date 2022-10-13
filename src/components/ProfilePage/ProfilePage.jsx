@@ -1,16 +1,12 @@
 import React from 'react'
-import {useQuery} from 'react-query'
-import {fetchUserProfile} from '../../apiHandler'
-import {useParams} from 'react-router-dom'
+import useAuth from '../../hooks/useAuth'
 
 const ProfilePage = () => {
-	const {token} = useParams()
-	const queryKey = ['fetchUserProfile']
-	const {data, isLoading} = useQuery(queryKey,()=>fetchUserProfile(token))
+	const {auth} = useAuth()
 	
-	return isLoading? (<h1>IS LOADING...</h1>):(
+	return (
 		<div>
-			Hello {data.firstName}
+			Hello {auth.email}
 		</div>
 	)
 }
