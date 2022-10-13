@@ -4,6 +4,7 @@ const api = axios.create({
 	baseURL: 'http://localhost:3001/api/v1'
 })
 
+
 export function logIn(email, password) {
 	return api.post('/user/login', {email, password}).then(res => res.data.body.token)
 		.catch((error) => {

@@ -4,7 +4,7 @@ import Footer from '../Footer/Footer'
 import {useNavigate} from 'react-router-dom'
 import useBoolean from '../../hooks/UseBoolean'
 import {useQuery} from 'react-query'
-import {logIn} from '../../apiHandler'
+import {logIn} from '../../api/apiHandler'
 import {useDispatch} from 'react-redux'
 import {setJWT} from '../../feature/user.slice'
 

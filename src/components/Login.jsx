@@ -3,11 +3,11 @@ import Header from './Header/Header'
 import Footer from './Footer/Footer'
 import useBoolean from '../hooks/UseBoolean'
 import {useQuery} from 'react-query'
-import {fetchUserProfile, logIn} from '../apiHandler'
+import {logIn} from '../api/apiHandler'
 import useAuth from '../hooks/useAuth'
 import {useNavigate} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
-import {setUserInfos} from '../feature/user.slice'
+import {setAccessToken} from '../feature/user.slice'
 
 const Login = () => {
 	const dispatch = useDispatch()
@@ -33,21 +33,16 @@ const Login = () => {
 		staleTime: 5_000
 	})
 	
-	const userProfileQueryKey = ['fetchUserProfile', tokenQuery.data]
-	const userProfileQuery = useQuery(userProfileQueryKey, () => fetchUserProfile(tokenQuery.data || localStorage.getItem('accessToken')))
-	
 	
 	const handleSubmit = async (e) => {
-		const {id, firstName, lastName} = userProfileQuery.data
 		e.preventDefault()
-		console.log(tokenQuery.error)
+		
 		if (tokenQuery.data) {
-			localStorage.setItem('accessToken', tokenQuery.data)
 			setAuth({token: tokenQuery.data})
-			dispatch(setUserInfos({email, id, firstName, lastName}))
+			dispatch(setAccessToken(tokenQuery.data))
 			setEmail('')
 			setPwd('')
-			navigate(`/profile/${id}`)
+			navigate(`/profile`)
 		} else {
 			setErrMsg('Identifiants incorrects')
 		}
