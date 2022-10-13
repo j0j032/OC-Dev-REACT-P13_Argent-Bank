@@ -1,12 +1,12 @@
 import React from 'react'
-import useAuth from '../../hooks/useAuth'
+import {useSelector} from 'react-redux'
 
 const ProfilePage = () => {
-	const {auth} = useAuth()
+	const userData = useSelector(state => state.user.userInfo.payload)
 	
 	return (
 		<div>
-			Hello {auth.email}
+			Hello {userData.firstName + userData.lastName}
 		</div>
 	)
 }

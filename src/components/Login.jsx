@@ -6,9 +6,11 @@ import {useQuery} from 'react-query'
 import {fetchUserProfile, logIn} from '../apiHandler'
 import useAuth from '../hooks/useAuth'
 import {useNavigate} from 'react-router-dom'
+import {useDispatch} from 'react-redux'
+import {setUserInfos} from '../feature/user.slice'
 
 const Login = () => {
-	
+	const dispatch = useDispatch()
 	const {setAuth} = useAuth()
 	const navigate = useNavigate()
 	const userRef = useRef()
@@ -26,27 +28,29 @@ const Login = () => {
 		setErrMsg('')
 	}, [email, pwd])
 	
-	const loginQueryKey = ['signIn', email, pwd]
-	const loginQuery = useQuery(loginQueryKey, () => logIn(email, pwd), {
+	const tokenQueryKey = ['signIn', email, pwd]
+	const tokenQuery = useQuery(tokenQueryKey, () => logIn(email, pwd), {
 		staleTime: 5_000
 	})
 	
-	const userProfileQueryKey = ['fetchUserProfile', loginQuery.data]
-	const userProfileQuery = useQuery(userProfileQueryKey, () => fetchUserProfile(loginQuery.data || localStorage.getItem('accessToken')))
+	const userProfileQueryKey = ['fetchUserProfile', tokenQuery.data]
+	const userProfileQuery = useQuery(userProfileQueryKey, () => fetchUserProfile(tokenQuery.data || localStorage.getItem('accessToken')))
 	
 	
 	const handleSubmit = async (e) => {
+		const {id, firstName, lastName} = userProfileQuery.data
 		e.preventDefault()
-		if (loginQuery.data) {
-			localStorage.setItem('accessToken', loginQuery.data)
-			setAuth({email, pwd, token: loginQuery.data, id: userProfileQuery.data.id})
+		if (tokenQuery.data) {
+			localStorage.setItem('accessToken', tokenQuery.data)
+			setAuth({token: tokenQuery.data})
+			dispatch(setUserInfos({email, id, firstName, lastName}))
 			setEmail('')
 			setPwd('')
-			navigate(`/profile/${userProfileQuery.data.id}`)
+			navigate(`/profile/${id}`)
 		} else {
 			setErrMsg('Identifiants incorrects')
 		}
-		console.log(loginQuery)
+		console.log(tokenQuery)
 	}
 	
 	return (

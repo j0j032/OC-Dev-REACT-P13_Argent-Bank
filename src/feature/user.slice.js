@@ -11,14 +11,11 @@ const userSlice = createSlice({
 	name: 'user',
 	initialState,
 	reducers: {
-		setJWT: (state, {payload}) => {
-			state.userToken = payload
-		},
 		setUserInfos: (state, {payload}) => {
 			state.userInfo = {payload}
 		}
 	}
 })
 
-export const {setJWT, setUserInfos} = userSlice.actions
+export const {setUserInfos} = userSlice.actions
 export default userSlice.reducer

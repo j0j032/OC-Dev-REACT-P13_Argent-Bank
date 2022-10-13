@@ -38,7 +38,6 @@ const SignIn = () => {
 		await refetch()
 			.then(res => {
 				localStorage.setItem('AuthJWT', res.data)
-				dispatch(setJWT(res.data))
 			})
 	}
 	
