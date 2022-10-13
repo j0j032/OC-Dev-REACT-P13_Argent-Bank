@@ -1,0 +1,35 @@
+.profile {
+  &__mainContainer {
+	color: white;
+	background-color: $dark-bg;
+  }
+  
+  &__header {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding: 2.4rem;
+	text-align: center;
+	gap: 2.4rem;
+	
+	> h1 {
+	  font-size: 3.2rem;
+	}
+  }
+  
+  &__btn {
+	font-weight: bold;
+	width: fit-content;
+	padding: 1rem;
+	color: white;
+	border-color: $green;
+	background-color: $green;
+  }
+  
+  &__transactionCtn {
+	color: $dark-bg;
+	background-color: white;
+  }
+}
+
