@@ -7,6 +7,7 @@ import ProfilePage from './components/ProfilePage/ProfilePage'
 import Layout from './components/Layout'
 import Unauthorized from './components/Unauthorized/Unauthorized'
 import Login from './components/Login'
+import RequireAuth from './components/RequireAuth'
 
 const App = () => {
 	return (
@@ -20,7 +21,9 @@ const App = () => {
 				<Route path='/unauthorized' element={<Unauthorized/>}/>
 				
 				{/*Private*/}
-				<Route path='/profile/:token' element={<ProfilePage/>}/>
+				<Route element={<RequireAuth/>}>
+					<Route path='/profile' element={<ProfilePage/>}/>
+				</Route>
 				
 				{/*CatchAll*/}
 				<Route path='*' element={<Error404/>}/>
