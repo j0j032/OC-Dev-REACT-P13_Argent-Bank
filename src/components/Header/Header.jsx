@@ -14,7 +14,7 @@ const Header = ({user}) => {
 				location.pathname.split('/')[1] === 'profile' ? (
 					<div className='header__nav-container--profile'>
 						<i className='fa fa-user-circle sign-in-icon'></i>
-						<p>{user}</p>
+						<p className='header__userName'>{user}</p>
 						<NavLink className='header__nav-container' to={'/'}>
 							<i className='fa fa-sign-out'></i>
 							<p>Sign Out</p>
