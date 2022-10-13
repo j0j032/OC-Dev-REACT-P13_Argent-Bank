@@ -40,6 +40,7 @@ const Login = () => {
 	const handleSubmit = async (e) => {
 		const {id, firstName, lastName} = userProfileQuery.data
 		e.preventDefault()
+		console.log(tokenQuery.error)
 		if (tokenQuery.data) {
 			localStorage.setItem('accessToken', tokenQuery.data)
 			setAuth({token: tokenQuery.data})
@@ -55,7 +56,7 @@ const Login = () => {
 	
 	return (
 		<>
-			<Header/>
+			<Header user={''}/>
 			<main className='main signin__bg-dark'>
 				<section className='signin__container'>
 					<i className='fa fa-user-circle sign-in-icon'></i>

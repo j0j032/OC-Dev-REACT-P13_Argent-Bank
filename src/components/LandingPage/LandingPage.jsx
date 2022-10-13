@@ -9,12 +9,12 @@ const LandingPage = () => {
 	
 	return (
 		<>
-		<Header/>
-		<main>
-			<BannerLanding/>
-			<Argument/>
-		</main>
-		<Footer/>
+			<Header user={''}/>
+			<main>
+				<BannerLanding/>
+				<Argument/>
+			</main>
+			<Footer/>
 		</>
 	)
 }
