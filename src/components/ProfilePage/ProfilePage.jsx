@@ -4,12 +4,10 @@ import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
 import {useQuery} from 'react-query'
 import {fetchUserProfile} from '../../api/apiHandler'
-import {selectCurrentToken, selectCurrentUser} from '../../feature/auth/auth.slice'
+import {selectCurrentToken} from '../../feature/auth/auth.slice'
 
 const ProfilePage = () => {
-	const usR = useSelector(selectCurrentUser)
 	const token = useSelector(selectCurrentToken)
-	console.log(usR, token)
 	
 	const userProfileQueryKey = ['fetchUserProfile']
 	const {
@@ -22,7 +20,6 @@ const ProfilePage = () => {
 		refetchOnmount: false,
 		refetchOnReconnect: false
 	})
-	console.log(user)
 	
 	const accounts = [
 		{
