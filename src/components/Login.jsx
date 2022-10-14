@@ -4,14 +4,12 @@ import Footer from './Footer/Footer'
 import useBoolean from '../hooks/UseBoolean'
 import {useQuery} from 'react-query'
 import {logIn} from '../api/apiHandler'
-import useAuth from '../hooks/useAuth'
 import {useNavigate} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
-import {setAccessToken} from '../feature/user.slice'
+import {setCredentials} from '../feature/auth/auth.slice'
 
 const Login = () => {
 	const dispatch = useDispatch()
-	const {setAuth} = useAuth()
 	const navigate = useNavigate()
 	const userRef = useRef()
 	const errRef = useRef()
@@ -38,8 +36,7 @@ const Login = () => {
 		e.preventDefault()
 		
 		if (tokenQuery.data) {
-			setAuth({token: tokenQuery.data})
-			dispatch(setAccessToken(tokenQuery.data))
+			dispatch(setCredentials({user: email, accessToken: tokenQuery.data}))
 			setEmail('')
 			setPwd('')
 			navigate(`/profile`)
