@@ -12,6 +12,7 @@ export function logIn(email, password) {
 		})
 }
 
+
 export function signUp(email, password, firstName, lastName) {
 	return api.post('/user/signup', {
 		email,
@@ -28,3 +29,4 @@ export function fetchUserProfile(token) {
 export function updateUserProfile({firstName, lastName}) {
 	return api.put('/user/profile', {firstName, lastName}).then(res => console.log(res))
 }
+

@@ -4,7 +4,7 @@ import LandingPage from './components/LandingPage/LandingPage'
 import Error404 from './components/Error404/Error404'
 import ProfilePage from './components/ProfilePage/ProfilePage'
 import Layout from './components/Layout'
-import SignIn from './components/SignIn/SignIn'
+import SignInPage from './components/SignIn/SignInPage'
 import RequireAuth from './feature/auth/RequireAuth'
 
 const App = () => {
@@ -14,8 +14,8 @@ const App = () => {
 				
 				{/*public*/}
 				<Route path='/' element={<LandingPage/>}/>
-				<Route path='/signin' element={<SignIn/>}/>
-				<Route path='/login' element={<SignIn/>}/>
+				<Route path='/signin' element={<SignInPage/>}/>
+				<Route path='/login' element={<SignInPage/>}/>
 				
 				{/*Private*/}
 				<Route element={<RequireAuth/>}>
