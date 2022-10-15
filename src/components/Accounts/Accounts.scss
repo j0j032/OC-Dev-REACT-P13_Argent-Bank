@@ -1,0 +1,44 @@
+.accounts {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+.account {
+  &__card {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 80%;
+	padding: 3.2rem 2.4rem;
+	color: $dark-bg;
+	background-color: white;
+	@include mobile {
+	  align-items: start;
+	  flex-direction: column;
+	  gap: 2.4rem;
+	}
+  }
+  
+  &__title {
+	font-weight: 400;
+  }
+  
+  &__amount {
+	font-size: 4rem;
+	font-weight: bold;
+  }
+  
+  &__description {
+	font-weight: 400;
+  }
+  
+  &__btn {
+	font-size: 1.8rem;
+	width: 200px;
+	@include mobile {
+	  width: 100%;
+	}
+  }
+}
