@@ -1,27 +1,21 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useSelector} from 'react-redux'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
-import {useQuery} from 'react-query'
-import {fetchUserProfile} from '../../api/apiHandler'
+import {useMutation, useQuery} from 'react-query'
+import {fetchUserProfile, updateUserProfile} from '../../api/apiHandler'
 import {selectCurrentToken} from '../../feature/auth/auth.slice'
 import Modal from '../Modal/Modal'
 import useBoolean from '../../hooks/UseBoolean'
 
 const ProfilePage = () => {
 	const token = useSelector(selectCurrentToken)
-	const [isToggle, {setToggle}] = useBoolean(false)
+	const [isToggle, {setFalse, setToggle}] = useBoolean(false)
 	const userProfileQueryKey = ['fetchUserProfile']
 	const {
 		data: user,
-		isLoading
-	} = useQuery(userProfileQueryKey, () => fetchUserProfile(token), {
-		staleTime: 50000,
-		retry: 1,
-		refetchOnWindowFocus: false,
-		refetchOnmount: false,
-		refetchOnReconnect: false
-	})
+		isLoading, refetch, isFetched
+	} = useQuery(userProfileQueryKey, () => fetchUserProfile(token))
 	
 	const accounts = [
 		{
@@ -41,11 +35,36 @@ const ProfilePage = () => {
 		}
 	]
 	
+	const fakedata = {
+		'firstName': 'Tony',
+		'lastName': 'Stark'
+	}
+	
+	const {isLoading: isUpdating, mutate} = useMutation(async (e) => {
+		e.preventDefault()
+		setFalse()
+		await updateUserProfile(fakedata, token)
+		refetch()
+	})
+	if (isUpdating) {
+		return <div>LOADING</div>
+	}
+	
 	const editModal = (
-		<div className='modal__bg'>
-			<button onClick={setToggle}>FERMER</button>
-			<Modal defaultFirstName={user.firstName} defaultLastName={user.lastName}/>
-		</div>
+		<>
+			{isFetched && (
+				<Modal>
+					<button onClick={setFalse}>FERMER</button>
+					<form onSubmit={mutate}>
+						<label htmlFor='firstName'>First name:</label>
+						<input id='firstName' type='text' defaultValue={user.firstName}/>
+						<label htmlFor='lastName'>Last name:</label>
+						<input id='lastName' type='text' defaultValue={user.lastName}/>
+						<button type='submit' disabled={isUpdating}>VALIDER</button>
+					</form>
+				</Modal>
+			)}
+		</>
 	)
 	
 	return (

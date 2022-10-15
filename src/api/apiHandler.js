@@ -26,7 +26,7 @@ export function fetchUserProfile(token) {
 	return api.post('/user/profile', {}, {headers: {'Authorization': `Bearer ${token}`}}).then(res => res.data.body)
 }
 
-export function updateUserProfile({firstName, lastName}) {
-	return api.put('/user/profile', {firstName, lastName}).then(res => console.log(res))
+export function updateUserProfile(userData, token) {
+	return api.put('/user/profile', userData, {headers: {'Authorization': `Bearer ${token}`}})
 }
 

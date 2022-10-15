@@ -27,7 +27,8 @@ const SignInForm = () => {
 	
 	const tokenQueryKey = ['signIn', email, pwd]
 	const tokenQuery = useQuery(tokenQueryKey, () => logIn(email, pwd), {
-		staleTime: 50000
+		staleTime: 50000,
+		cacheTime: 0
 	})
 	
 	const handleSubmit = async (e) => {
