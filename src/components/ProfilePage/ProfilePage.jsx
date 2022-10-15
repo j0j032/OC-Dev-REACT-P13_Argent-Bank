@@ -5,10 +5,12 @@ import Footer from '../Footer/Footer'
 import {useQuery} from 'react-query'
 import {fetchUserProfile} from '../../api/apiHandler'
 import {selectCurrentToken} from '../../feature/auth/auth.slice'
+import Modal from '../Modal/Modal'
+import useBoolean from '../../hooks/UseBoolean'
 
 const ProfilePage = () => {
 	const token = useSelector(selectCurrentToken)
-	
+	const [isToggle, {setToggle}] = useBoolean(false)
 	const userProfileQueryKey = ['fetchUserProfile']
 	const {
 		data: user,
@@ -39,6 +41,13 @@ const ProfilePage = () => {
 		}
 	]
 	
+	const editModal = (
+		<div className='modal__bg'>
+			<button onClick={setToggle}>FERMER</button>
+			<Modal defaultFirstName={user.firstName} defaultLastName={user.lastName}/>
+		</div>
+	)
+	
 	return (
 		<>
 			{isLoading ? (<p>Loading...</p>) : (
@@ -47,7 +56,8 @@ const ProfilePage = () => {
 					<main className='profile__mainContainer'>
 						<div className='profile__header'>
 							<h1>Welcome back <br/>{`${user.firstName} ${user.lastName} !`}</h1>
-							<button className='profile__btn'>Edit Name</button>
+							<button onClick={setToggle} className='profile__btn'>Edit Name</button>
+							{isToggle && editModal}
 						</div>
 						<section className='profile__accounts'>
 							{

@@ -1,0 +1,18 @@
+.modal {
+  &__bg {
+	position: absolute;
+	background-color: #00BC77;
+  }
+  
+  &__container {
+	padding: 2.4rem;
+	
+	> form {
+	  display: flex;
+	  align-items: start;
+	  flex-direction: column;
+	  margin-top: 2.4rem;
+	  gap: 2.4rem;
+	}
+  }
+}
