@@ -3,7 +3,7 @@ import {logIn} from '../../api/apiHandler'
 import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
-import useBoolean from '../../hooks/UseBoolean'
+import useBoolean from '../../hooks/useBoolean'
 import {setCredentials} from '../../feature/auth/auth.slice'
 
 const SignInForm = () => {
