@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useState} from 'react'
 import {useSelector} from 'react-redux'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
@@ -8,43 +8,44 @@ import {selectCurrentToken} from '../../feature/auth/auth.slice'
 import Modal from '../Modal/Modal'
 import useBoolean from '../../hooks/UseBoolean'
 
+const accounts = [
+	{
+		title: 'Checking (x8349)',
+		amount: '2,082.79',
+		description: 'Available'
+	},
+	{
+		title: 'Savings (x6712)',
+		amount: '10,928.42',
+		description: 'Available'
+	},
+	{
+		title: 'Checking (x8349)',
+		amount: '184.30',
+		description: 'Current'
+	}
+]
+
+
 const ProfilePage = () => {
 	const token = useSelector(selectCurrentToken)
 	const [isToggle, {setFalse, setToggle}] = useBoolean(false)
+	const [firstName, setFirstName] = useState()
+	const [lastName, setLastName] = useState()
+	
 	const userProfileQueryKey = ['fetchUserProfile']
 	const {
 		data: user,
 		isLoading, refetch, isFetched
 	} = useQuery(userProfileQueryKey, () => fetchUserProfile(token))
 	
-	const accounts = [
-		{
-			title: 'Checking (x8349)',
-			amount: '2,082.79',
-			description: 'Available'
-		},
-		{
-			title: 'Savings (x6712)',
-			amount: '10,928.42',
-			description: 'Available'
-		},
-		{
-			title: 'Checking (x8349)',
-			amount: '184.30',
-			description: 'Current'
-		}
-	]
-	
-	const fakedata = {
-		'firstName': 'Tony',
-		'lastName': 'Stark'
-	}
 	
 	const {isLoading: isUpdating, mutate} = useMutation(async (e) => {
 		e.preventDefault()
+		const newUserData = {'firstName': firstName, 'lastName': lastName}
 		setFalse()
-		await updateUserProfile(fakedata, token)
-		refetch()
+		await updateUserProfile(newUserData, token)
+		await refetch()
 	})
 	if (isUpdating) {
 		return <div>LOADING</div>
@@ -57,10 +58,12 @@ const ProfilePage = () => {
 					<button onClick={setFalse}>FERMER</button>
 					<form onSubmit={mutate}>
 						<label htmlFor='firstName'>First name:</label>
-						<input id='firstName' type='text' defaultValue={user.firstName}/>
+						<input onChange={(e) => setFirstName(e.target.value)} id='firstName'
+						       type='text' defaultValue={user.firstName}/>
 						<label htmlFor='lastName'>Last name:</label>
-						<input id='lastName' type='text' defaultValue={user.lastName}/>
-						<button type='submit' disabled={isUpdating}>VALIDER</button>
+						<input onChange={(e) => setLastName(e.target.value)} id='lastName'
+						       type='text' defaultValue={user.lastName}/>
+						<button type='submit'>VALIDER</button>
 					</form>
 				</Modal>
 			)}
