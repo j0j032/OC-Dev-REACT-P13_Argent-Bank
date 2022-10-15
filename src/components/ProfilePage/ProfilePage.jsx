@@ -1,43 +1,74 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {useSelector} from 'react-redux'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
-import {useQuery} from 'react-query'
-import {fetchUserProfile} from '../../api/apiHandler'
+import {useMutation, useQuery} from 'react-query'
+import {fetchUserProfile, updateUserProfile} from '../../api/apiHandler'
 import {selectCurrentToken} from '../../feature/auth/auth.slice'
+import Modal from '../Modal/Modal'
+import useBoolean from '../../hooks/useBoolean'
+import Accounts from '../Accounts/Accounts'
+
 
 const ProfilePage = () => {
 	const token = useSelector(selectCurrentToken)
+	const [isToggle, {setFalse, setToggle}] = useBoolean(false)
+	const [firstName, setFirstName] = useState()
+	const [lastName, setLastName] = useState()
 	
-	const userProfileQueryKey = ['fetchUserProfile']
+	
 	const {
 		data: user,
-		isLoading
-	} = useQuery(userProfileQueryKey, () => fetchUserProfile(token), {
-		staleTime: 50000,
-		retry: 1,
-		refetchOnWindowFocus: false,
-		refetchOnmount: false,
-		refetchOnReconnect: false
+		isLoading,
+		refetch,
+		isFetched
+	} = useQuery(['fetchUserProfile'], () => fetchUserProfile(token))
+	
+	const {
+		isLoading: isUpdating,
+		mutate,
+		isError: isUpdateError,
+		isSuccess: isUpdateSuccess
+	} = useMutation(async (e) => {
+		e.preventDefault()
+		const newUserData = {
+			'firstName': firstName?.length > 0 ? firstName : user.firstName,
+			'lastName': lastName?.length > 0 ? lastName : user.lastName
+		}
+		setFalse()
+		await updateUserProfile(newUserData, token)
+		await refetch()
 	})
 	
-	const accounts = [
-		{
-			title: 'Checking (x8349)',
-			amount: '2,082.79',
-			description: 'Available'
-		},
-		{
-			title: 'Savings (x6712)',
-			amount: '10,928.42',
-			description: 'Available'
-		},
-		{
-			title: 'Checking (x8349)',
-			amount: '184.30',
-			description: 'Current'
-		}
-	]
+	if (isUpdating) {
+		return <div>UPDATING</div>
+	}
+	
+	const editModal = (
+		<>
+			{isFetched && (
+				<Modal>
+					<section className='modal__updateNames'>
+						<button onClick={setFalse}>X</button>
+						<form onSubmit={mutate}>
+							<div>
+								<label htmlFor='firstName'>First name:</label>
+								<input onChange={(e) => setFirstName(e.target.value)} id='firstName'
+								       autoFocus={true} type='text'
+								       defaultValue={user.firstName}/>
+							</div>
+							<div>
+								<label htmlFor='lastName'>Last name:</label>
+								<input onChange={(e) => setLastName(e.target.value)} id='lastName'
+								       type='text' defaultValue={user.lastName}/>
+							</div>
+							<button className='profile__btn' type='submit'>VALIDER</button>
+						</form>
+					</section>
+				</Modal>
+			)}
+		</>
+	)
 	
 	return (
 		<>
@@ -47,24 +78,12 @@ const ProfilePage = () => {
 					<main className='profile__mainContainer'>
 						<div className='profile__header'>
 							<h1>Welcome back <br/>{`${user.firstName} ${user.lastName} !`}</h1>
-							<button className='profile__btn'>Edit Name</button>
+							<button onClick={setToggle} className='profile__btn'>Edit Name</button>
+							{isToggle && editModal}
+							{isUpdateError && (<p>Oups, il y a eu un problème !</p>)}
+							{isUpdateSuccess && (<p>{'Votre nom à été mis à jour !'}</p>)}
 						</div>
-						<section className='profile__accounts'>
-							{
-								accounts.map((account, i) => (
-									<div key={i} className='profile__account-card'>
-										<div className='account'>
-											<h3 className='account__title'>{`Argent Bank ${account.title}`}</h3>
-											<p className='account__amount'>{`$${account.amount}`}</p>
-											<p className='account__description'>{`${account.description} Balance`}</p>
-										</div>
-										<button className='profile__btn account__btn'>
-											View transactions
-										</button>
-									</div>
-								))
-							}
-						</section>
+						<Accounts/>
 					</main>
 				</>
 			)}
@@ -72,5 +91,6 @@ const ProfilePage = () => {
 		</>
 	)
 }
+
 
 export default ProfilePage

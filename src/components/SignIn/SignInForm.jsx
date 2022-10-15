@@ -3,7 +3,7 @@ import {logIn} from '../../api/apiHandler'
 import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
-import useBoolean from '../../hooks/UseBoolean'
+import useBoolean from '../../hooks/useBoolean'
 import {setCredentials} from '../../feature/auth/auth.slice'
 
 const SignInForm = () => {
@@ -27,7 +27,8 @@ const SignInForm = () => {
 	
 	const tokenQueryKey = ['signIn', email, pwd]
 	const tokenQuery = useQuery(tokenQueryKey, () => logIn(email, pwd), {
-		staleTime: 50000
+		staleTime: 50000,
+		cacheTime: 0
 	})
 	
 	const handleSubmit = async (e) => {
