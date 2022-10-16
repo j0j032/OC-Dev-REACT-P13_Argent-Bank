@@ -7,8 +7,9 @@ import {selectCurrentToken} from '../../feature/auth.slice'
 import Modal from '../../components/Modal/Modal'
 import useBoolean from '../../hooks/useBoolean'
 import Accounts from './Accounts/Accounts'
-import {toast, ToastContainer} from 'react-toastify'
 import {getUserProfile, updateUserProfile} from '../../api/profile.requests'
+import Error404 from '../Error404/Error404'
+import Loader from '../../components/Loader/Loader'
 
 
 const Profile = () => {
@@ -17,20 +18,13 @@ const Profile = () => {
 	const [firstName, setFirstName] = useState()
 	const [lastName, setLastName] = useState()
 	
-	const notifySuccess = () => {
-		toast.success('Successfully update!', {
-			draggable: true,
-			autoClose: 3000,
-			hideProgressBar: true,
-			position: toast.POSITION.TOP_LEFT
-		})
-	}
-	
 	const {
 		data: user,
 		isLoading,
 		refetch,
-		isFetched
+		isFetched,
+		isError,
+		error
 	} = useQuery(['fetchUserProfile'], () => getUserProfile(token))
 	
 	const {
@@ -47,11 +41,17 @@ const Profile = () => {
 		setFalse()
 		await updateUserProfile(newUserData, token)
 		await refetch()
-		if (isUpdateSuccess) notifySuccess()
 	})
 	
+	// console.log('err: ' + isUpdateError)
+	console.log(isError + error)
+	console.log('Succ: ' + isUpdateSuccess)
+	
 	if (isUpdating) {
-		return <div>UPDATING</div>
+		return <Loader/>
+	}
+	if (isError) {
+		return <Error404/>
 	}
 	
 	const editModal = (
@@ -82,7 +82,7 @@ const Profile = () => {
 	
 	return (
 		<>
-			{isLoading ? (<p>Loading...</p>) : (
+			{isLoading ? (<Loader/>) : (
 				<>
 					<Header user={user.firstName}/>
 					<main className='profile__mainContainer'>
@@ -91,7 +91,6 @@ const Profile = () => {
 							<button onClick={setToggle} className='profile__btn'>Edit Name</button>
 							{isToggle && editModal}
 							{isUpdateError && (<p>Oups, il y a eu un problème !</p>)}
-							<ToastContainer/>
 						</div>
 						<Accounts/>
 					</main>

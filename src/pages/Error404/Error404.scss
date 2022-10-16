@@ -1,0 +1,16 @@
+.ERROR404 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  
+  > h1 {
+	font-size: 8rem;
+	color: $green;
+  }
+  
+  .home-link {
+	margin-bottom: 10rem;
+  }
+}
