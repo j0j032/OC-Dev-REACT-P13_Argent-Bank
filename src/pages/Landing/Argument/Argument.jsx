@@ -1,7 +1,7 @@
 import React from 'react'
-import chat from '../../assets/img/icon-chat.png'
-import money from '../../assets/img/icon-money.png'
-import security from '../../assets/img/icon-security.png'
+import chat from '../../../assets/img/icon-chat.png'
+import money from '../../../assets/img/icon-money.png'
+import security from '../../../assets/img/icon-security.png'
 
 const Argument = () => {
 	
@@ -22,19 +22,19 @@ const Argument = () => {
 			heading: 'Security you can trust',
 			text: 'We use top of the line encryption to make sure your data and money is always' +
 				' safe.'
-		},
+		}
 	]
 	
 	return (
 		<section className='features-container'>
 			{
-			features.map((feature, index)=> (
-				<div className='feature__item' key={index+feature.heading}>
-					<img className='feature__icon' src={feature.icon} alt={feature.heading}/>
-					<h3>{feature.heading}</h3>
-					<p>{feature.text}</p>
-				</div>
-			))
+				features.map((feature, index) => (
+					<div className='feature__item' key={index + feature.heading}>
+						<img className='feature__icon' src={feature.icon} alt={feature.heading}/>
+						<h3>{feature.heading}</h3>
+						<p>{feature.text}</p>
+					</div>
+				))
 			}
 		</section>
 	)

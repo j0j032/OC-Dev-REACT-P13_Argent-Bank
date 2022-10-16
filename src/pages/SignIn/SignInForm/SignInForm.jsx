@@ -2,9 +2,9 @@ import {useQuery} from 'react-query'
 import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
-import useBoolean from '../../hooks/useBoolean'
-import {setCredentials} from '../../feature/auth/auth.slice'
-import {login} from './SignIn.request'
+import useBoolean from '../../../hooks/useBoolean'
+import {setCredentials} from '../../../feature/auth.slice'
+import {login} from '../../../api/identification.requests'
 
 const SignInForm = () => {
 	

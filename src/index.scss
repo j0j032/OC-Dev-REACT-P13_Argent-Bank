@@ -2,16 +2,16 @@
 @import "styles/variables";
 @import "styles/breakpoints";
 @import "styles/mixins";
-@import "styles/app";
-@import "components/Header/Header";
-@import "components/BannerLanding/BannerLanding";
-@import "src/components/Argument/Arguments";
-@import "components/Error404/Error404";
-@import "components/LandingPage/LandingPage";
-@import "components/ProfilePage/ProfilePage";
-@import "components/SignIn/SignIn";
-@import "components/Footer/Footer";
-@import "components/Modal/Modal";
-@import "components/Accounts/Accounts";
+@import "src/styles/common";
+@import "src/components/Header/Header";
+@import "src/pages/Landing/BannerLanding/BannerLanding";
+@import "src/pages/Landing/Argument/Arguments";
+@import "src/pages/Error404/Error404";
+@import "src/pages/Landing/Landing";
+@import "src/pages/Profile/Profile";
+@import "src/pages/SignIn/SignIn";
+@import "src/components/Footer/Footer";
+@import "src/components/Modal/Modal";
+@import "src/pages/Profile/Accounts/Accounts";
 
 

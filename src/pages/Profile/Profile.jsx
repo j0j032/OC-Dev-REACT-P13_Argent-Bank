@@ -1,17 +1,17 @@
 import React, {useState} from 'react'
 import {useSelector} from 'react-redux'
-import Header from '../Header/Header'
-import Footer from '../Footer/Footer'
+import Header from '../../components/Header/Header'
+import Footer from '../../components/Footer/Footer'
 import {useMutation, useQuery} from 'react-query'
-import {selectCurrentToken} from '../../feature/auth/auth.slice'
-import Modal from '../Modal/Modal'
+import {selectCurrentToken} from '../../feature/auth.slice'
+import Modal from '../../components/Modal/Modal'
 import useBoolean from '../../hooks/useBoolean'
-import Accounts from '../Accounts/Accounts'
+import Accounts from './Accounts/Accounts'
 import {toast, ToastContainer} from 'react-toastify'
-import {getUserProfile, updateUserProfile} from './Profile.requests'
+import {getUserProfile, updateUserProfile} from '../../api/profile.requests'
 
 
-const ProfilePage = () => {
+const Profile = () => {
 	const token = useSelector(selectCurrentToken)
 	const [isToggle, {setFalse, setToggle}] = useBoolean(false)
 	const [firstName, setFirstName] = useState()
@@ -103,4 +103,4 @@ const ProfilePage = () => {
 }
 
 
-export default ProfilePage
+export default Profile

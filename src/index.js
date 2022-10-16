@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
+import RouterConfig from './navigation/RouterConfig'
 import './index.scss'
 import 'react-toastify/dist/ReactToastify.css'
 import {QueryClientProvider, QueryClient} from 'react-query'
@@ -17,7 +17,7 @@ root.render(
 		<Provider store={store}>
 			<QueryClientProvider client={queryClient}>
 				<Routes>
-					<Route path='/*' element={<App/>}></Route>
+					<Route path='/*' element={<RouterConfig/>}></Route>
 				</Routes>
 				<ReactQueryDevtools initialIsOpen={false}/>
 			</QueryClientProvider>
