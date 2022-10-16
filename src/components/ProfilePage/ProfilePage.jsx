@@ -8,6 +8,7 @@ import {selectCurrentToken} from '../../feature/auth/auth.slice'
 import Modal from '../Modal/Modal'
 import useBoolean from '../../hooks/useBoolean'
 import Accounts from '../Accounts/Accounts'
+import {toast, ToastContainer} from 'react-toastify'
 
 
 const ProfilePage = () => {
@@ -16,6 +17,14 @@ const ProfilePage = () => {
 	const [firstName, setFirstName] = useState()
 	const [lastName, setLastName] = useState()
 	
+	const notifySuccess = () => {
+		toast.success('Successfully update!', {
+			draggable: true,
+			autoClose: 3000,
+			hideProgressBar: true,
+			position: toast.POSITION.TOP_LEFT
+		})
+	}
 	
 	const {
 		data: user,
@@ -38,6 +47,7 @@ const ProfilePage = () => {
 		setFalse()
 		await updateUserProfile(newUserData, token)
 		await refetch()
+		if (isUpdateSuccess) notifySuccess()
 	})
 	
 	if (isUpdating) {
@@ -81,7 +91,7 @@ const ProfilePage = () => {
 							<button onClick={setToggle} className='profile__btn'>Edit Name</button>
 							{isToggle && editModal}
 							{isUpdateError && (<p>Oups, il y a eu un problème !</p>)}
-							{isUpdateSuccess && (<p>{'Votre nom à été mis à jour !'}</p>)}
+							<ToastContainer/>
 						</div>
 						<Accounts/>
 					</main>

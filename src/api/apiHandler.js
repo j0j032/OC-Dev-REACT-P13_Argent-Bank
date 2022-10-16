@@ -27,6 +27,8 @@ export function fetchUserProfile(token) {
 }
 
 export function updateUserProfile(userData, token) {
-	return api.put('/user/profile', userData, {headers: {'Authorization': `Bearer ${token}`}})
+	return api.put('/user/profile', userData, {
+		headers: {'Authorization': `Bearer ${token}`}
+	})
 }
 
