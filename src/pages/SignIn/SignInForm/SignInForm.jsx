@@ -38,8 +38,8 @@ const SignInForm = () => {
 			setEmail('')
 			setPassword('')
 			navigate(`/profile`)
-		} else {
-			setErrMsg('Identifiants incorrects')
+		} else if (tokenQuery.isSuccess === false) {
+			setErrMsg('forgot email/password ?')
 		}
 		console.log(tokenQuery)
 	}

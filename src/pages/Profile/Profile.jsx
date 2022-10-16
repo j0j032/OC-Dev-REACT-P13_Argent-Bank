@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useSelector} from 'react-redux'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
@@ -10,6 +10,7 @@ import Accounts from './Accounts/Accounts'
 import {getUserProfile, updateUserProfile} from '../../api/profile.requests'
 import Error404 from '../Error404/Error404'
 import Loader from '../../components/Loader/Loader'
+import useDidMountEffect from '../../hooks/useDidMountEffect'
 
 
 const Profile = () => {
@@ -17,14 +18,22 @@ const Profile = () => {
 	const [isToggle, {setFalse, setToggle}] = useBoolean(false)
 	const [firstName, setFirstName] = useState()
 	const [lastName, setLastName] = useState()
+	const [showUpdateNotif, setShowUpdateNotif] = useState(false)
+	const [showLoginNotif, setShowLoginNotif] = useState(false)
+	
+	useEffect(() => {
+		setShowLoginNotif(true)
+		setTimeout(() => {
+			setShowLoginNotif(false)
+		}, 3000)
+	}, [])
 	
 	const {
 		data: user,
 		isLoading,
 		refetch,
 		isFetched,
-		isError,
-		error
+		isError
 	} = useQuery(['fetchUserProfile'], () => getUserProfile(token))
 	
 	const {
@@ -43,9 +52,15 @@ const Profile = () => {
 		await refetch()
 	})
 	
-	// console.log('err: ' + isUpdateError)
-	console.log(isError + error)
-	console.log('Succ: ' + isUpdateSuccess)
+	
+	// This hook is used to don't show on first render
+	useDidMountEffect(() => {
+		setShowUpdateNotif(true)
+		setTimeout(() => {
+			setShowUpdateNotif(false)
+		}, 3000)
+	}, [isUpdateSuccess])
+	
 	
 	if (isUpdating) {
 		return <Loader/>
@@ -87,10 +102,12 @@ const Profile = () => {
 					<Header user={user.firstName}/>
 					<main className='profile__mainContainer'>
 						<div className='profile__header'>
+							{showLoginNotif && (<p>You have been successfully logged in ! </p>)}
 							<h1>Welcome back <br/>{`${user.firstName} ${user.lastName} !`}</h1>
 							<button onClick={setToggle} className='profile__btn'>Edit Name</button>
 							{isToggle && editModal}
 							{isUpdateError && (<p>Oups, il y a eu un problème !</p>)}
+							{showUpdateNotif && (<p>Your Names have been successfully updated</p>)}
 						</div>
 						<Accounts/>
 					</main>
@@ -103,3 +120,4 @@ const Profile = () => {
 
 
 export default Profile
+
