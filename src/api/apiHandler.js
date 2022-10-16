@@ -5,14 +5,6 @@ const api = axios.create({
 })
 
 
-export function logIn(email, password) {
-	return api.post('/user/login', {email, password}).then(res => res.data.body.token)
-		.catch((error) => {
-			console.log(error.toJSON())
-		})
-}
-
-
 export function signUp(email, password, firstName, lastName) {
 	return api.post('/user/signup', {
 		email,
