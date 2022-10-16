@@ -1,10 +1,10 @@
 import {useQuery} from 'react-query'
-import {logIn} from '../../api/apiHandler'
 import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
-import useBoolean from '../../hooks/useBoolean'
-import {setCredentials} from '../../feature/auth/auth.slice'
+import useBoolean from '../../../hooks/useBoolean'
+import {setCredentials} from '../../../feature/auth.slice'
+import {login} from '../../../api/identification.requests'
 
 const SignInForm = () => {
 	
@@ -14,7 +14,7 @@ const SignInForm = () => {
 	const errRef = useRef()
 	const [isToggle, {setToggle}] = useBoolean(false)
 	const [email, setEmail] = useState('')
-	const [pwd, setPwd] = useState('')
+	const [password, setPassword] = useState('')
 	const [errMsg, setErrMsg] = useState('')
 	
 	useEffect(() => {
@@ -23,10 +23,10 @@ const SignInForm = () => {
 	
 	useEffect(() => {
 		setErrMsg('')
-	}, [email, pwd])
+	}, [email, password])
 	
-	const tokenQueryKey = ['signIn', email, pwd]
-	const tokenQuery = useQuery(tokenQueryKey, () => logIn(email, pwd), {
+	const tokenQueryKey = ['signIn', email, password]
+	const tokenQuery = useQuery(tokenQueryKey, () => login({email, password}), {
 		staleTime: 50000,
 		cacheTime: 0
 	})
@@ -36,7 +36,7 @@ const SignInForm = () => {
 		if (tokenQuery.data) {
 			dispatch(setCredentials({user: email, accessToken: tokenQuery.data}))
 			setEmail('')
-			setPwd('')
+			setPassword('')
 			navigate(`/profile`)
 		} else {
 			setErrMsg('Identifiants incorrects')
@@ -65,8 +65,8 @@ const SignInForm = () => {
 					<label htmlFor='password'>Password</label>
 					<input type='password'
 					       id='password'
-					       onChange={(e) => setPwd(e.target.value)}
-					       value={pwd}
+					       onChange={(e) => setPassword(e.target.value)}
+					       value={password}
 					       required
 					/>
 				</div>

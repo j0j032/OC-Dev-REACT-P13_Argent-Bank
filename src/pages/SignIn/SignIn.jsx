@@ -1,9 +1,9 @@
 import React from 'react'
-import Header from '../Header/Header'
-import Footer from '../Footer/Footer'
-import SignInForm from './SignInForm'
+import Header from '../../components/Header/Header'
+import Footer from '../../components/Footer/Footer'
+import SignInForm from './SignInForm/SignInForm'
 
-const SignInPage = () => {
+const SignIn = () => {
 	
 	return (
 		<>
@@ -20,4 +20,4 @@ const SignInPage = () => {
 	)
 }
 
-export default SignInPage
+export default SignIn

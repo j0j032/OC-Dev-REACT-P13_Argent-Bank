@@ -2,7 +2,7 @@ import React from 'react'
 import logo from '../../assets/img/argentBankLogo.png'
 import {NavLink, useLocation} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
-import {logOut} from '../../feature/auth/auth.slice'
+import {logOut} from '../../feature/auth.slice'
 
 const Header = ({user}) => {
 	const dispatch = useDispatch()
