@@ -3,12 +3,12 @@ import {useSelector} from 'react-redux'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
 import {useMutation, useQuery} from 'react-query'
-import {fetchUserProfile, updateUserProfile} from '../../api/apiHandler'
 import {selectCurrentToken} from '../../feature/auth/auth.slice'
 import Modal from '../Modal/Modal'
 import useBoolean from '../../hooks/useBoolean'
 import Accounts from '../Accounts/Accounts'
 import {toast, ToastContainer} from 'react-toastify'
+import {getUserProfile, updateUserProfile} from './Profile.requests'
 
 
 const ProfilePage = () => {
@@ -31,7 +31,7 @@ const ProfilePage = () => {
 		isLoading,
 		refetch,
 		isFetched
-	} = useQuery(['fetchUserProfile'], () => fetchUserProfile(token))
+	} = useQuery(['fetchUserProfile'], () => getUserProfile(token))
 	
 	const {
 		isLoading: isUpdating,

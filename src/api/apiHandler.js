@@ -1,26 +1,59 @@
 import axios from 'axios'
 
-const api = axios.create({
-	baseURL: 'http://localhost:3001/api/v1'
-})
-
-
-export function signUp(email, password, firstName, lastName) {
-	return api.post('/user/signup', {
-		email,
-		password,
-		firstName,
-		lastName
-	}).then(res => console.log(res))
+const defaultOptions = {
+	headers: {'Content-Type': 'application/json'}
 }
 
-export function fetchUserProfile(token) {
-	return api.post('/user/profile', {}, {headers: {'Authorization': `Bearer ${token}`}}).then(res => res.data.body)
+const computeHeaders = (options = {}) => {
+	const authToken = {Authorization: `Bearer ${options.token || ''}`}
+	const headers = {}
+	
+	Object.assign(headers, authToken)
+	Object.assign(headers, defaultOptions.headers)
+	Object.assign(headers, options.headers || {})
+	
+	return headers
 }
 
-export function updateUserProfile(userData, token) {
-	return api.put('/user/profile', userData, {
-		headers: {'Authorization': `Bearer ${token}`}
+const head = (url) =>
+	axios
+		.head(url)
+		.then((response) => response.status)
+		.catch((reason) => (reason.response.status === 404 ? 404 : reason))
+
+const get = (url, options = {}) => {
+	return axios({
+		method: 'get',
+		url: url,
+		headers: computeHeaders(options)
 	})
 }
 
+const post = (url, data, options = {}) => {
+	return axios({
+		method: 'post',
+		url: url,
+		headers: computeHeaders(options),
+		data
+	})
+}
+
+const patch = (url, data, options = {}) => {
+	return axios({
+		method: 'patch',
+		url: url,
+		headers: computeHeaders(options),
+		data
+	})
+}
+
+const put = (url, data, options = {}) => {
+	return axios({
+		method: 'put',
+		url: url,
+		headers: computeHeaders(options),
+		data
+	})
+}
+
+export {head, get, post, patch, put}
