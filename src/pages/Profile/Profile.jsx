@@ -10,7 +10,7 @@ import Accounts from './Accounts/Accounts'
 import {getUserProfile, updateUserProfile} from '../../api/profile.requests'
 import Error404 from '../Error404/Error404'
 import Loader from '../../components/Loader/Loader'
-import useDidMountEffect from '../../hooks/useDidMountEffect'
+import useNotification from '../../hooks/useNotification'
 
 
 const Profile = () => {
@@ -18,15 +18,6 @@ const Profile = () => {
 	const [isToggle, {setFalse, setToggle}] = useBoolean(false)
 	const [firstName, setFirstName] = useState()
 	const [lastName, setLastName] = useState()
-	const [showUpdateNotif, setShowUpdateNotif] = useState(false)
-	const [showLoginNotif, setShowLoginNotif] = useState(false)
-	
-	useEffect(() => {
-		setShowLoginNotif(true)
-		setTimeout(() => {
-			setShowLoginNotif(false)
-		}, 3000)
-	}, [])
 	
 	const {
 		data: user,
@@ -52,15 +43,8 @@ const Profile = () => {
 		await refetch()
 	})
 	
-	
-	// This hook is used to don't show on first render
-	useDidMountEffect(() => {
-		setShowUpdateNotif(true)
-		setTimeout(() => {
-			setShowUpdateNotif(false)
-		}, 3000)
-	}, [isUpdateSuccess])
-	
+	const notifError = useNotification(isUpdateError)
+	const notifUpdated = useNotification(isUpdateSuccess)
 	
 	if (isUpdating) {
 		return <Loader/>
@@ -102,12 +86,16 @@ const Profile = () => {
 					<Header user={user.firstName}/>
 					<main className='profile__mainContainer'>
 						<div className='profile__header'>
-							{showLoginNotif && (<p>You have been successfully logged in ! </p>)}
 							<h1>Welcome back <br/>{`${user.firstName} ${user.lastName} !`}</h1>
 							<button onClick={setToggle} className='profile__btn'>Edit Name</button>
 							{isToggle && editModal}
-							{isUpdateError && (<p>Oups, il y a eu un problème !</p>)}
-							{showUpdateNotif && (<p>Your Names have been successfully updated</p>)}
+							{notifUpdated && (
+								<p className='notif__update'>✨ Updated !</p>)
+							}
+							{notifError && (
+								<p className='notif__update notif-error'>⚠️ Oups, update failed
+								                                         !</p>)
+							}
 						</div>
 						<Accounts/>
 					</main>

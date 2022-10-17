@@ -5,6 +5,7 @@
   }
   
   &__header {
+	position: relative;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -29,4 +30,33 @@
   }
 }
 
+.notif {
+  &__update {
+	position: absolute;
+	top: 10%;
+	right: 2%;
+	font-weight: 600;
+	width: 200px;
+	padding: 0.8rem;
+	animation: ease-out 0.3s;
+	animation-name: appears;
+	color: white;
+	border-radius: 8px;
+	background-color: $green;
+  }
+}
 
+.notif__update.notif-error {
+  background-color: #D54444;
+}
+
+
+@keyframes appears {
+  from {
+	opacity: 0;
+  }
+  
+  to {
+	opacity: 1;
+  }
+}
