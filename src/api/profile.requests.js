@@ -2,7 +2,9 @@ import {post, put} from './apiHandler'
 
 const API_URL = 'http://localhost:3001/api/v1'
 const profileUrl = `${API_URL}/user/profile`
-//const BADProfileUrl = `${API_URL}/user/profilee` to check errors
+
+// To check errors (development env)
+//const BADProfileUrl = `${API_URL}/user/profilee`
 
 
 /**
