@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {useSelector} from 'react-redux'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
@@ -21,15 +21,15 @@ const Profile = () => {
 	
 	const {
 		data: user,
-		isLoading,
-		refetch,
-		isFetched,
-		isError
+		isLoading: isLoadingUserData,
+		refetch: updateUserData,
+		isFetched: userDataIsFetched,
+		isError: userDataError
 	} = useQuery(['fetchUserProfile'], () => getUserProfile(token))
 	
 	const {
 		isLoading: isUpdating,
-		mutate,
+		mutate: editUserData,
 		isError: isUpdateError,
 		isSuccess: isUpdateSuccess
 	} = useMutation(async (e) => {
@@ -40,7 +40,7 @@ const Profile = () => {
 		}
 		setFalse()
 		await updateUserProfile(newUserData, token)
-		await refetch()
+		await updateUserData()
 	})
 	
 	const notifError = useNotification(isUpdateError)
@@ -49,17 +49,17 @@ const Profile = () => {
 	if (isUpdating) {
 		return <Loader/>
 	}
-	if (isError) {
+	if (userDataError) {
 		return <Error404/>
 	}
 	
 	const editModal = (
 		<>
-			{isFetched && (
+			{userDataIsFetched && (
 				<Modal>
 					<section className='modal__updateNames'>
 						<button onClick={setFalse}>X</button>
-						<form onSubmit={mutate}>
+						<form onSubmit={editUserData}>
 							<div>
 								<label htmlFor='firstName'>First name:</label>
 								<input onChange={(e) => setFirstName(e.target.value)} id='firstName'
@@ -81,7 +81,7 @@ const Profile = () => {
 	
 	return (
 		<>
-			{isLoading ? (<Loader/>) : (
+			{isLoadingUserData ? (<Loader/>) : (
 				<>
 					<Header user={user.firstName}/>
 					<main className='profile__mainContainer'>
@@ -89,13 +89,9 @@ const Profile = () => {
 							<h1>Welcome back <br/>{`${user.firstName} ${user.lastName} !`}</h1>
 							<button onClick={setToggle} className='profile__btn'>Edit Name</button>
 							{isToggle && editModal}
-							{notifUpdated && (
-								<p className='notif__update'>✨ Updated !</p>)
-							}
+							{notifUpdated && (<p className='notif__update'>✨ Updated !</p>)}
 							{notifError && (
-								<p className='notif__update notif-error'>⚠️ Oups, update failed
-								                                         !</p>)
-							}
+								<p className='notif__update notif-error'>⚠️ update failed</p>)}
 						</div>
 						<Accounts/>
 					</main>
