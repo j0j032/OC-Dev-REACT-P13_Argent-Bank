@@ -1,10 +1,12 @@
-import {useQuery} from 'react-query'
+import {useMutation, useQuery} from 'react-query'
 import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 import useBoolean from '../../../hooks/useBoolean'
 import {setCredentials} from '../../../feature/auth.slice'
 import {login} from '../../../api/identification.requests'
+import useNotification from '../../../hooks/useNotification'
+import useDidMountEffect from '../../../hooks/useDidMountEffect'
 
 const SignInForm = () => {
 	
@@ -17,6 +19,7 @@ const SignInForm = () => {
 	const [password, setPassword] = useState('')
 	const [errMsg, setErrMsg] = useState('')
 	
+	
 	useEffect(() => {
 		userRef.current.focus()
 	}, [])
@@ -25,29 +28,37 @@ const SignInForm = () => {
 		setErrMsg('')
 	}, [email, password])
 	
-	const tokenQueryKey = ['signIn', email, password]
-	const tokenQuery = useQuery(tokenQueryKey, () => login({email, password}), {
-		staleTime: 50000,
-		cacheTime: 0
+	
+	const tokenQueryKey = ['signIn']
+	const {data, refetch} = useQuery(tokenQueryKey, () => login({email, password}), {
+		enabled: false
 	})
 	
-	const handleSubmit = async (e) => {
+	const {mutate: handleLogin, isSuccess} = useMutation(async (e) => {
 		e.preventDefault()
-		if (tokenQuery.data) {
-			dispatch(setCredentials({user: email, accessToken: tokenQuery.data}))
-			setEmail('')
-			setPassword('')
+		await refetch()
+	})
+	
+	const redirect = () => {
+		const timer = setTimeout(() => {
 			navigate(`/profile`)
-		} else if (tokenQuery.isSuccess === false) {
-			setErrMsg('forgot email/password ?')
+		}, 1000)
+		return () => {
+			clearTimeout(timer)
 		}
-		console.log(tokenQuery)
 	}
 	
+	useDidMountEffect(() => {
+		dispatch(setCredentials({user: email, accessToken: data}))
+		redirect()
+	}, [isSuccess])
+	
+	
+	//const notifError = useNotification(isError)
 	
 	return (
 		<>
-			<form onSubmit={handleSubmit} className='signin__form'>
+			<form onSubmit={handleLogin} className='signin__form'>
 				<div className='input__wrapper'>
 					<label htmlFor='email'>Email</label>
 					<input type='email'
@@ -79,6 +90,8 @@ const SignInForm = () => {
 				
 				<button className='signin__btn'>Sign In</button>
 			</form>
+			{/*{notifError && (
+				<p className='notif__update notif-error'>⚠️ Invalid email/password</p>)}*/}
 			<p ref={errRef}
 			   className={errMsg ? 'signin__error' : 'offScreen'}
 			   aria-live='assertive'
