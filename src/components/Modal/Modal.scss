@@ -1,0 +1,65 @@
+.modal {
+  &__bg {
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  &__container {
+	padding: 4rem;
+	border-radius: 8px;
+	background-color: white;
+  }
+  
+  &__updateNames {
+	position: relative;
+	
+	> button {
+	  position: absolute;
+	  top: -2.4rem;
+	  right: -2.4rem;
+	  padding: 0.2rem 0.4rem;
+	  cursor: pointer;
+	  color: white;
+	  border-color: $dark-bg;
+	  border-radius: 8px;
+	  background-color: $dark-bg;
+	}
+	
+	> form {
+	  display: flex;
+	  align-items: start;
+	  flex-direction: column;
+	  color: $dark-bg;
+	  gap: 2.4rem;
+	  
+	  > div {
+		display: flex;
+		align-items: start;
+		flex-direction: column;
+		
+		> label {
+		  font-weight: bold;
+		  margin-bottom: 0.8rem;
+		}
+		
+		> input {
+		  height: 3.2rem;
+		}
+	  }
+	  
+	  
+	  > button {
+		width: 100%;
+	  }
+	}
+  }
+}
+
