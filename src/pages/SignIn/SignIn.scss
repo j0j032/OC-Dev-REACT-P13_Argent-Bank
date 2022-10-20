@@ -1,0 +1,66 @@
+.signin {
+  &__bg-dark {
+	background-color: $dark-bg;
+  }
+  
+  &__container {
+	width: 300px;
+	margin: 5.6rem auto;
+	padding: 3.2rem;
+	text-align: center;
+	background-color: white;
+	
+	> i {
+	  margin-bottom: 2.4rem;
+	}
+	
+	> h1 {
+	  font-size: 2.4rem;
+	  margin-bottom: 2.4rem;
+	}
+  }
+  
+  &__form {
+	display: flex;
+	justify-content: start;
+	flex-direction: column;
+	gap: 1.6rem;
+  }
+  
+  &__btn {
+	font-size: 1.8rem;
+	font-weight: bold;
+	padding: 0.8rem;
+	cursor: pointer;
+	color: white;
+	border: none;
+	background-color: $green-darker;
+	
+	&:hover {
+	  border-radius: 24px;
+	}
+  }
+}
+
+.input {
+  &__wrapper {
+	display: flex;
+	flex-direction: column;
+	font-weight: bold;
+	text-align: start;
+	
+	> input {
+	  font-size: 1.8rem;
+	  padding: 0.5rem;
+	}
+  }
+  
+  &__remember {
+	display: flex;
+	gap: 0.8rem;
+	
+	> input {
+	  cursor: pointer;
+	}
+  }
+}
