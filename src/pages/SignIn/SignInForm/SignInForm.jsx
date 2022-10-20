@@ -17,11 +17,9 @@ const SignInForm = () => {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [allowed, setAllowed] = useState(false)
-	const [err400, setErr400] = useState(false)
-	const [serverErr, setServerErr] = useState(false)
+	const [err, setErr] = useState(false)
 	const notifSuccess = useNotification(allowed)
-	const notifError400 = useNotification(err400)
-	const notifServerErr = useNotification(serverErr)
+	const notifError = useNotification(err)
 	
 	useEffect(() => {
 		userRef.current.focus()
@@ -38,23 +36,14 @@ const SignInForm = () => {
 	})
 	
 	const showError = () => {
-		if (error.response.status === 400) {
-			setErr400(true)
-			const timer = setTimeout(() => {
-				setErr400(false)
-			}, 200)
-			return () => {
-				clearTimeout(timer)
-			}
-		} else if (error.response.status > 400) {
-			setServerErr(true)
-			const timer = setTimeout(() => {
-				setServerErr(false)
-			}, 200)
-			return () => {
-				clearTimeout(timer)
-			}
+		setErr(true)
+		const timer = setTimeout(() => {
+			setErr(false)
+		}, 200)
+		return () => {
+			clearTimeout(timer)
 		}
+		
 	}
 	
 	const redirect = () => {
@@ -116,11 +105,8 @@ const SignInForm = () => {
 				<button className='signin__btn'>Sign In</button>
 			</form>
 			{notifSuccess && (<p className='notif__update'>👋 Welcome back ! </p>)}
-			{notifError400 && (
-				<p className='notif__update notif-error'>⚠️ Invalid email/password</p>)}
-			{notifServerErr && (
-				<p className='notif__update notif-error'>🛠 Sorry, we are having server
-				                                         problem, please try again later</p>)}
+			{notifError && (
+				<p className='notif__update notif-error'>{`⚠️ ${error.message}`}</p>)}
 		</>
 	)
 }
