@@ -43,7 +43,6 @@ const SignInForm = () => {
 		return () => {
 			clearTimeout(timer)
 		}
-		
 	}
 	
 	const redirect = () => {
