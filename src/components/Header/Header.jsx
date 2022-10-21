@@ -15,11 +15,16 @@ const Header = ({user}) => {
 		</NavLink>
 	)
 	
+	function handleLogout() {
+		dispatch(logOut)
+		localStorage.clear('Token')
+	}
+	
 	const profileNav = (
 		<div className='header__nav-container--profile'>
 			<i className='fa fa-user-circle sign-in-icon'></i>
 			<p className='header__userName'>{user}</p>
-			<NavLink onClick={dispatch(logOut)} className='header__nav-container'
+			<NavLink onClick={handleLogout} className='header__nav-container'
 			         to={'/'}>
 				<i className='fa fa-sign-out'></i>
 				<p>Sign Out</p>

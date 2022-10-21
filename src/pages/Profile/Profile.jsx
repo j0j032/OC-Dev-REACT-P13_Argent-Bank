@@ -14,7 +14,7 @@ import useNotification from '../../hooks/useNotification'
 
 
 const Profile = () => {
-	const token = useSelector(selectCurrentToken)
+	const token = useSelector(selectCurrentToken) || localStorage.getItem('Token')
 	const [isToggle, {setFalse, setToggle}] = useBoolean(false)
 	const [firstName, setFirstName] = useState()
 	const [lastName, setLastName] = useState()

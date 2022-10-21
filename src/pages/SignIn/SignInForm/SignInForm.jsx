@@ -35,7 +35,7 @@ const SignInForm = () => {
 			dispatch(setCredentials({user: emailRef.current.value, accessToken: data}))
 			redirect()
 			// remember me
-			if (isToggle) localStorage.setItem('Token:', data)
+			if (isToggle) localStorage.setItem('Token', data)
 		},
 		onError: () => showError()
 	})
