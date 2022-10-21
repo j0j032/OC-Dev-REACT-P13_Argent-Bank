@@ -1,4 +1,4 @@
-import {useMutation, useQuery} from 'react-query'
+import {useMutation} from 'react-query'
 import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
@@ -6,34 +6,46 @@ import useBoolean from '../../../hooks/useBoolean'
 import {setCredentials} from '../../../feature/auth.slice'
 import {login} from '../../../api/identification.requests'
 import useNotification from '../../../hooks/useNotification'
-import useDidMountEffect from '../../../hooks/useDidMountEffect'
 
 const SignInForm = () => {
 	
+	const [isToggle, {setToggle}] = useBoolean(false)
+	const [err, setErr] = useState(false)
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const userRef = useRef()
-	const [isToggle, {setToggle}] = useBoolean(false)
-	const [email, setEmail] = useState('')
-	const [password, setPassword] = useState('')
-	const [allowed, setAllowed] = useState(false)
-	const [err, setErr] = useState(false)
-	const notifSuccess = useNotification(allowed)
-	const notifError = useNotification(err)
+	const emailRef = useRef()
+	const pwdRef = useRef()
 	
 	useEffect(() => {
-		userRef.current.focus()
+		emailRef.current.focus()
 	}, [])
 	
 	
-	const tokenQueryKey = ['signIn']
-	const {data, refetch, isSuccess, isError, error} = useQuery(tokenQueryKey,
-		() => login({email, password}), {enabled: false, retry: false})
+	const redirect = () => {
+		const timer = setTimeout(() => {
+			navigate(`/profile`)
+		}, 2000)
+		return () => {
+			clearTimeout(timer)
+		}
+	}
 	
-	const {mutate: handleLogin} = useMutation(async (e) => {
-		e.preventDefault()
-		await refetch()
+	const handleLoginn = useMutation(login, {
+		onSuccess: (data) => {
+			dispatch(setCredentials({user: emailRef.current.value, accessToken: data}))
+			redirect()
+			// remember me
+			if (isToggle) localStorage.setItem('Token:', data)
+		},
+		onError: () => showError()
 	})
+	const notifSuccess = useNotification(handleLoginn.isSuccess)
+	const notifError = useNotification(err)
+	
+	const handleSubmit = e => {
+		e.preventDefault()
+		handleLoginn.mutate({email: emailRef.current.value, password: pwdRef.current.value})
+	}
 	
 	const showError = () => {
 		setErr(true)
@@ -45,42 +57,17 @@ const SignInForm = () => {
 		}
 	}
 	
-	const redirect = () => {
-		const timer = setTimeout(() => {
-			navigate(`/profile`)
-		}, 2000)
-		return () => {
-			clearTimeout(timer)
-		}
-	}
-	
-	useDidMountEffect(() => {
-		if (isSuccess) setAllowed(true)
-		if (isError) {
-			console.log(error)
-			showError()
-		}
-	}, [isSuccess, isError])
-	
-	
-	useDidMountEffect(() => {
-		dispatch(setCredentials({user: email, accessToken: data}))
-		redirect()
-	}, [allowed])
-	
 	
 	return (
 		<>
-			<form onSubmit={handleLogin} className='signin__form'>
+			<form onSubmit={handleSubmit} className='signin__form'>
 				<div className='input__wrapper'>
 					<label htmlFor='email'>Email</label>
 					<input type='email'
 					       id='email'
 					       name='email'
-					       ref={userRef}
+					       ref={emailRef}
 					       autoComplete='off'
-					       onChange={(e) => setEmail(e.target.value)}
-					       value={email}
 					       required
 					/>
 				</div>
@@ -89,8 +76,7 @@ const SignInForm = () => {
 					<label htmlFor='password'>Password</label>
 					<input type='password'
 					       id='password'
-					       onChange={(e) => setPassword(e.target.value)}
-					       value={password}
+					       ref={pwdRef}
 					       required
 					/>
 				</div>
@@ -105,7 +91,7 @@ const SignInForm = () => {
 			</form>
 			{notifSuccess && (<p className='notif__update'>👋 Welcome back ! </p>)}
 			{notifError && (
-				<p className='notif__update notif-error'>{`⚠️ ${error.message}`}</p>)}
+				<p className='notif__update notif-error'>{`⚠️ ${handleLoginn.error.message ? handleLoginn.error.message : 'An error has occurred'}`}</p>)}
 		</>
 	)
 }
