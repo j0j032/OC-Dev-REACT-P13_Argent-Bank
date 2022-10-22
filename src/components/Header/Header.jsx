@@ -11,15 +11,8 @@ import {
 const Header = () => {
 	const dispatch = useDispatch()
 	const user = useSelector(selectCurrentUser) || localStorage.getItem('user')
-	const isLoggedIn = useSelector(isCurrentlyLoggedIn) || localStorage.getItem('isLoggedIn') === 'true'
+	const isLoggedIn = useSelector(isCurrentlyLoggedIn) || localStorage.getItem('isConnected') === 'true'
 	const [isUserConnected, setIsUserConnected] = useState(false)
-	
-	const defaultNav = (
-		<NavLink className='header__nav-container' to='/login'>
-			<i className='fa fa-user-circle'></i>
-			<p>Sign In</p>
-		</NavLink>
-	)
 	
 	function handleLogout() {
 		dispatch(logOut({isLoggedIn: false}))
@@ -30,6 +23,14 @@ const Header = () => {
 	useEffect(() => {
 		if (isLoggedIn) setIsUserConnected(true)
 	}, [isLoggedIn])
+	
+	
+	const defaultNav = (
+		<NavLink className='header__nav-container' to='/login'>
+			<i className='fa fa-user-circle'></i>
+			<p>Sign In</p>
+		</NavLink>
+	)
 	
 	const profileNav = (
 		<div className='header__nav-container--profile'>
@@ -49,7 +50,6 @@ const Header = () => {
 		<header className='header__container'>
 			<NavLink to='/'><img className='header__logo' src={logo} alt='logo'/></NavLink>
 			{isUserConnected ? (profileNav) : (defaultNav)}
-			{/*{location.pathname.split('/')[1] === 'profile' ? (profileNav) : (defaultNav)}*/}
 		</header>
 	)
 }

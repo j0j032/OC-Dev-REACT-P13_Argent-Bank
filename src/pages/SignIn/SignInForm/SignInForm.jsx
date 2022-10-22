@@ -1,5 +1,5 @@
 import {useMutation} from 'react-query'
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useRef} from 'react'
 import {useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 import useBoolean from '../../../hooks/useBoolean'
@@ -9,18 +9,19 @@ import useNotification from '../../../hooks/useNotification'
 
 const SignInForm = () => {
 	
-	const [isToggle, {setToggle}] = useBoolean(false)
-	const [err, setErr] = useState(false)
+	const [rememberSwitch, {setToggle: toggleRemember}] = useBoolean(false)
+	const [errorSwitch, {setFalse: turnErrorOff, setTrue: turnErrorOn}] = useBoolean(false)
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const emailRef = useRef()
 	const pwdRef = useRef()
 	
+	// set the focus on render
 	useEffect(() => {
 		emailRef.current.focus()
 	}, [])
 	
-	
+	// Navigate with a delay to show success notification
 	const redirect = () => {
 		const timer = setTimeout(() => {
 			navigate(`/profile`)
@@ -30,38 +31,52 @@ const SignInForm = () => {
 		}
 	}
 	
-	function rememberMe(token) {
-		localStorage.setItem('Token', token)
-		localStorage.setItem('isLoggedIn', true)
+	/**
+	 * Actions when user inputs are valid and retrieve in DB
+	 * @param {string} identifier - JWT
+	 */
+	function handleLogin(identifier) {
+		dispatch(setCredentials({accessToken: identifier, loggedIn: true}))
+		redirect()
+		if (rememberSwitch) {
+			const userInfos = {Token: identifier, isConnected: 'true'}
+			for (const prop in userInfos) localStorage.setItem(prop, userInfos[prop])
+		}
 	}
 	
-	const handleLoginn = useMutation(login, {
-		onSuccess: (data) => {
-			dispatch(setCredentials({accessToken: data, loggedIn: true}))
-			redirect()
-			// remember me
-			if (isToggle) rememberMe(data)
-		},
-		onError: () => showError()
-	})
-	const notifSuccess = useNotification(handleLoginn.isSuccess)
-	const notifError = useNotification(err)
-	
-	const handleSubmit = e => {
-		e.preventDefault()
-		handleLoginn.mutate({email: emailRef.current.value, password: pwdRef.current.value})
-	}
-	
+	/**
+	 * To set the errorSwitch to true and back to false in case of another error happen and
+	 * need to be notified
+	 * @returns {(function(): void)|*}
+	 */
 	const showError = () => {
-		setErr(true)
+		turnErrorOn()
 		const timer = setTimeout(() => {
-			setErr(false)
+			turnErrorOff()
 		}, 200)
 		return () => {
 			clearTimeout(timer)
 		}
 	}
 	
+	// using react-query useMutation hook: https://tanstack.com/query/v4/docs/reference/useMutation
+	const connection = useMutation(login, {
+		onSuccess: (data) => handleLogin(data),
+		onError: () => showError()
+	})
+	
+	
+	const handleSubmit = e => {
+		e.preventDefault()
+		connection.mutate({email: emailRef.current.value, password: pwdRef.current.value})
+	}
+	
+	// Hook description in file 'src/hooks/useNotification.jsx'
+	const notifSuccess = useNotification(connection.isSuccess, 3000)
+	
+	//Listen a boolean in case of multi error in a row
+	// (if using connection.isError, notification will display only once)
+	const notifError = useNotification(errorSwitch, 3000)
 	
 	return (
 		<>
@@ -87,7 +102,7 @@ const SignInForm = () => {
 				</div>
 				
 				<div className='input__remember'>
-					<input onClick={setToggle} defaultChecked={isToggle} type='checkbox'
+					<input onClick={toggleRemember} defaultChecked={rememberSwitch} type='checkbox'
 					       id='remember-me'/>
 					<label htmlFor='remember-me'>Remember me</label>
 				</div>
@@ -96,7 +111,7 @@ const SignInForm = () => {
 			</form>
 			{notifSuccess && (<p className='notif__update'>👋 Welcome back ! </p>)}
 			{notifError && (
-				<p className='notif__update notif-error'>{`⚠️ ${handleLoginn.error.message ? handleLoginn.error.message : 'An error has occurred'}`}</p>)}
+				<p className='notif__update notif-error'>{`⚠️ ${connection.error.message ? connection.error.message : 'An error has occurred'}`}</p>)}
 		</>
 	)
 }
