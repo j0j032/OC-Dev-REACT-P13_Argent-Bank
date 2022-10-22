@@ -7,6 +7,12 @@
 	padding: 0.5rem 2rem;
   }
   
+  &__user-container {
+	display: flex;
+	align-items: center;
+	gap: 1.2rem;
+  }
+  
   &__logo {
 	width: 200px;
   }

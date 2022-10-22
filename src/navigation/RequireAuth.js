@@ -7,7 +7,7 @@ import {selectCurrentToken} from '../feature/auth.slice'
  * @returns {JSX.Element}
  */
 const RequireAuth = () => {
-	const token = useSelector(selectCurrentToken)
+	const token = useSelector(selectCurrentToken) || localStorage.getItem('Token')
 	const location = useLocation()
 	return (
 		token
