@@ -30,12 +30,17 @@ const SignInForm = () => {
 		}
 	}
 	
+	function rememberMe(token) {
+		localStorage.setItem('Token', token)
+		localStorage.setItem('isLoggedIn', true)
+	}
+	
 	const handleLoginn = useMutation(login, {
 		onSuccess: (data) => {
-			dispatch(setCredentials({user: emailRef.current.value, accessToken: data}))
+			dispatch(setCredentials({accessToken: data, loggedIn: true}))
 			redirect()
 			// remember me
-			if (isToggle) localStorage.setItem('Token', data)
+			if (isToggle) rememberMe(data)
 		},
 		onError: () => showError()
 	})
