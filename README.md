@@ -1,6 +1,7 @@
 # Getting Started with Create React RouterConfig
 
-This project was bootstrapped with [Create React RouterConfig](https://github.com/facebook/create-react-app).
+This project is associated with the following
+backend(https://github.com/OpenClassrooms-Student-Center/Project-10-Bank-API)
 
 ## Available Scripts
 
