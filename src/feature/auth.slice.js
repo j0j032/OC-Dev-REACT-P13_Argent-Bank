@@ -21,6 +21,7 @@ const authSlice = createSlice({
 export const {setCredentials, logOut} = authSlice.actions
 export default authSlice.reducer
 
+export const getCurrentState = state => state.auth
 export const selectCurrentToken = (state) => state.auth.token
 export const selectCurrentUser = (state) => state.auth.user
 export const isCurrentlyLoggedIn = (state) => state.auth.loggedIn

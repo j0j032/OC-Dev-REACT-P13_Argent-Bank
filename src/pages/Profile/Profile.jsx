@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import {useMutation, useQuery} from 'react-query'
-import {selectCurrentToken, setCredentials} from '../../feature/auth.slice'
+import {getCurrentState, selectCurrentToken, setCredentials} from '../../feature/auth.slice'
 import Modal from '../../components/Modal/Modal'
 import useBoolean from '../../hooks/useBoolean'
 import Accounts from './Accounts/Accounts'
@@ -13,9 +13,9 @@ import Loader from '../../components/Loader/Loader'
 import useNotification from '../../hooks/useNotification'
 import useDidMountEffect from '../../hooks/useDidMountEffect'
 
-
 const Profile = () => {
 	const dispatch = useDispatch()
+	const currentState = useSelector(getCurrentState)
 	const token = useSelector(selectCurrentToken) || localStorage.getItem('Token')
 	const [modalIsOpen, {setFalse: closeModal, setToggle: toggleModal}] = useBoolean(false)
 	const [firstName, setFirstName] = useState('')
@@ -31,7 +31,7 @@ const Profile = () => {
 	} = useQuery(['fetchUserProfile'], () => getUserProfile(token))
 	
 	function setUser(name) {
-		dispatch(setCredentials({user: name, accessToken: token, loggedIn: true}))
+		dispatch(setCredentials({...currentState, user: name, accessToken: token}))
 		localStorage.setItem('user', name)
 	}
 	

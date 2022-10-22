@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import logo from '../../assets/img/argentBankLogo.png'
 import {NavLink} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
+import useBoolean from '../../hooks/useBoolean'
 import {
 	isCurrentlyLoggedIn,
 	logOut,
@@ -12,16 +13,17 @@ const Header = () => {
 	const dispatch = useDispatch()
 	const user = useSelector(selectCurrentUser) || localStorage.getItem('user')
 	const isLoggedIn = useSelector(isCurrentlyLoggedIn) || localStorage.getItem('isConnected') === 'true'
-	const [isUserConnected, setIsUserConnected] = useState(false)
+	const [connected, {setTrue: connectUser, setFalse: disconnectUser}] = useBoolean(false)
 	
 	function handleLogout() {
-		dispatch(logOut({isLoggedIn: false}))
+		dispatch(logOut())
 		localStorage.clear()
-		setIsUserConnected(false)
+		disconnectUser()
 	}
 	
+	// to keep profile nav if user is connected and navigate somewhere else than profile page
 	useEffect(() => {
-		if (isLoggedIn) setIsUserConnected(true)
+		if (isLoggedIn) connectUser()
 	}, [isLoggedIn])
 	
 	
@@ -49,7 +51,7 @@ const Header = () => {
 	return (
 		<header className='header__container'>
 			<NavLink to='/'><img className='header__logo' src={logo} alt='logo'/></NavLink>
-			{isUserConnected ? (profileNav) : (defaultNav)}
+			{connected ? (profileNav) : (defaultNav)}
 		</header>
 	)
 }
