@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import Header from '../../components/Header/Header'
-import Footer from '../../components/Footer/Footer'
+import Header from '../commons/components/Header/Header'
+import Footer from '../commons/components/Footer/Footer'
 import {useMutation, useQuery} from 'react-query'
 import {getCurrentState, selectCurrentToken, setCredentials} from '../../feature/auth.slice'
-import Modal from '../../components/Modal/Modal'
+import Modal from '../commons/components/Modal/Modal'
 import useBoolean from '../../hooks/useBoolean'
 import Accounts from './Accounts/Accounts'
 import {getUserProfile, updateUserProfile} from '../../api/profile.requests'
 import Error404 from '../Error404/Error404'
-import Loader from '../../components/Loader/Loader'
+import Loader from '../commons/components/Loader/Loader'
 import useNotification from '../../hooks/useNotification'
 import useDidMountEffect from '../../hooks/useDidMountEffect'
 
@@ -30,15 +30,14 @@ const Profile = () => {
 		isError: userDataError
 	} = useQuery(['fetchUserProfile'], () => getUserProfile(token))
 	
-	function setUser(name) {
+	const setUser = useCallback((name) => {
 		dispatch(setCredentials({...currentState, user: name, accessToken: token}))
 		localStorage.setItem('user', name)
-	}
+	}, [currentState, dispatch, token])
 	
-	// Check when data is fetched and set userState
 	useEffect(() => {
 		if (userDataIsFetched) setUser(user.firstName)
-	}, [userDataIsFetched])
+	})
 	
 	// The update func using react-query useMutation hook: https://tanstack.com/query/v4/docs/reference/useMutation
 	const {

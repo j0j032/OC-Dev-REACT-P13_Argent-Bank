@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react'
-import logo from '../../assets/img/argentBankLogo.png'
+import logo from '../../../../assets/img/argentBankLogo.png'
 import {NavLink} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
-import useBoolean from '../../hooks/useBoolean'
+import useBoolean from '../../../../hooks/useBoolean'
 import {
 	isCurrentlyLoggedIn,
 	logOut,
 	selectCurrentUser
-} from '../../feature/auth.slice'
+} from '../../../../feature/auth.slice'
 
 const Header = () => {
 	const dispatch = useDispatch()
@@ -24,7 +24,7 @@ const Header = () => {
 	// to keep profile nav if user is connected and navigate somewhere else than profile page
 	useEffect(() => {
 		if (isLoggedIn) connectUser()
-	}, [isLoggedIn])
+	}, [isLoggedIn, connectUser])
 	
 	
 	const defaultNav = (

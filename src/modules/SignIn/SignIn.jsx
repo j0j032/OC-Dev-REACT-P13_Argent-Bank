@@ -1,7 +1,7 @@
 import React from 'react'
-import Header from '../../components/Header/Header'
-import Footer from '../../components/Footer/Footer'
-import SignInForm from './SignInForm/SignInForm'
+import Header from '../commons/components/Header/Header'
+import Footer from '../commons/components/Footer/Footer'
+import SignInForm from './SignInForm'
 
 const SignIn = () => {
 	

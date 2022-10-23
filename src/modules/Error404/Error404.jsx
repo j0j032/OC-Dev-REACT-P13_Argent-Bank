@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import logo from '../../assets/img/argentBankLogo.png'
 import {NavLink, useNavigate} from 'react-router-dom'
-import Footer from '../../components/Footer/Footer'
+import Footer from '../commons/components/Footer/Footer'
 import {useDispatch} from 'react-redux'
 import {logOut} from '../../feature/auth.slice'
 

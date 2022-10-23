@@ -1,6 +1,6 @@
 import React from 'react'
 import {NavLink} from 'react-router-dom'
-import logo from '../../assets/img/argentBankLogo.png'
+import logo from '../../../../assets/img/argentBankLogo.png'
 
 const Loader = () => {
 	return (
