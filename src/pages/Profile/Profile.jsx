@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import {useMutation, useQuery} from 'react-query'
-import {selectCurrentToken, setCredentials} from '../../feature/auth.slice'
+import {getCurrentState, selectCurrentToken, setCredentials} from '../../feature/auth.slice'
 import Modal from '../../components/Modal/Modal'
 import useBoolean from '../../hooks/useBoolean'
 import Accounts from './Accounts/Accounts'
@@ -13,14 +13,15 @@ import Loader from '../../components/Loader/Loader'
 import useNotification from '../../hooks/useNotification'
 import useDidMountEffect from '../../hooks/useDidMountEffect'
 
-
 const Profile = () => {
 	const dispatch = useDispatch()
+	const currentState = useSelector(getCurrentState)
 	const token = useSelector(selectCurrentToken) || localStorage.getItem('Token')
-	const [isToggle, {setFalse, setToggle}] = useBoolean(false)
-	const [firstName, setFirstName] = useState()
-	const [lastName, setLastName] = useState()
+	const [modalIsOpen, {setFalse: closeModal, setToggle: toggleModal}] = useBoolean(false)
+	const [firstName, setFirstName] = useState('')
+	const [lastName, setLastName] = useState('')
 	
+	// The DB query using useQuery hook from react-query: https://react-query-v3.tanstack.com/reference/useQuery
 	const {
 		data: user,
 		isLoading: isLoadingUserData,
@@ -30,15 +31,16 @@ const Profile = () => {
 	} = useQuery(['fetchUserProfile'], () => getUserProfile(token))
 	
 	function setUser(name) {
-		dispatch(setCredentials({user: name, accessToken: token, loggedIn: true}))
+		dispatch(setCredentials({...currentState, user: name, accessToken: token}))
 		localStorage.setItem('user', name)
 	}
 	
+	// Check when data is fetched and set userState
 	useEffect(() => {
 		if (userDataIsFetched) setUser(user.firstName)
 	}, [userDataIsFetched])
 	
-	
+	// The update func using react-query useMutation hook: https://tanstack.com/query/v4/docs/reference/useMutation
 	const {
 		isLoading: isUpdating,
 		mutate: editUserData,
@@ -50,17 +52,19 @@ const Profile = () => {
 			'firstName': firstName?.length > 0 ? firstName : user.firstName,
 			'lastName': lastName?.length > 0 ? lastName : user.lastName
 		}
-		setFalse()
+		closeModal()
 		await updateUserProfile(newUserData, token)
 		await updateUserData()
 	})
 	
+	// Hook description in file 'src/hooks/useDidMountEffect.jsx'
 	useDidMountEffect(() => {
 		setUser(firstName)
 	}, [isUpdateSuccess])
 	
-	const notifError = useNotification(isUpdateError)
-	const notifUpdated = useNotification(isUpdateSuccess)
+	// Hook description in file 'src/hooks/useNotification.jsx'
+	const notifError = useNotification(isUpdateError, 3000)
+	const notifUpdated = useNotification(isUpdateSuccess, 3000)
 	
 	if (isUpdating) {
 		return <Loader/>
@@ -69,12 +73,13 @@ const Profile = () => {
 		return <Error404/>
 	}
 	
+	// The modal parent is a reusable component. It displays a fade BG layer and takes children
 	const editModal = (
 		<>
 			{userDataIsFetched && (
 				<Modal>
 					<section className='modal__updateNames'>
-						<button onClick={setFalse}>X</button>
+						<button onClick={closeModal}>X</button>
 						<form onSubmit={editUserData}>
 							<div>
 								<label htmlFor='firstName'>First name:</label>
@@ -103,8 +108,9 @@ const Profile = () => {
 					<main className='profile__mainContainer'>
 						<div className='profile__header'>
 							<h1>Welcome back <br/>{`${user.firstName} ${user.lastName} !`}</h1>
-							<button onClick={setToggle} className='profile__btn'>Edit Name</button>
-							{isToggle && editModal}
+							<button onClick={toggleModal} className='profile__btn'>Edit Name
+							</button>
+							{modalIsOpen && editModal}
 							{notifUpdated && (<p className='notif__update'>✨ Updated !</p>)}
 							{notifError && (
 								<p className='notif__update notif-error'>⚠️ update failed</p>)}

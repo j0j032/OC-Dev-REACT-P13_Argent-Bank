@@ -9,7 +9,7 @@ const Landing = () => {
 	
 	return (
 		<>
-			<Header user={''}/>
+			<Header/>
 			<main>
 				<BannerLanding/>
 				<Argument/>
