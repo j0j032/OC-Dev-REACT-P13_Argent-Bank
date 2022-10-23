@@ -1,18 +1,18 @@
-@import "styles/reset";
-@import "styles/variables";
-@import "styles/breakpoints";
-@import "styles/mixins";
-@import "src/styles/common";
-@import "src/components/Header/Header";
-@import "src/pages/Landing/BannerLanding/BannerLanding";
-@import "src/pages/Landing/Argument/Arguments";
-@import "src/pages/Error404/Error404";
-@import "src/pages/Landing/Landing";
-@import "src/pages/Profile/Profile";
-@import "src/pages/SignIn/SignIn";
-@import "src/components/Footer/Footer";
-@import "src/components/Modal/Modal";
-@import "src/pages/Profile/Accounts/Accounts";
-@import "src/components/Loader/Loader";
+@import "/src/styles/reset";
+@import "/src/styles/variables";
+@import "/src/styles/breakpoints";
+@import "/src/styles/mixins";
+@import "/src/styles/common";
+@import "/src/modules/commons/components/Header/Header";
+@import "/src/modules/landing/BannerLanding/BannerLanding";
+@import "/src/modules/landing/Argument/Arguments";
+@import "/src/modules/error404/Error404";
+@import "/src/modules/landing/Landing";
+@import "/src/modules/profile/Profile";
+@import "/src/modules/signIn/SignIn";
+@import "/src/modules/commons/components/Footer/Footer";
+@import "/src/modules/commons/components/Modal/Modal";
+@import "/src/modules/profile/Accounts/Accounts";
+@import "/src/modules/commons/components/Loader/Loader";
 
 

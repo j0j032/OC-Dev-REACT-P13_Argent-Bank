@@ -1,10 +1,10 @@
 import React from 'react'
 import {Route, Routes} from 'react-router-dom'
-import Landing from '../pages/Landing/Landing'
-import Error404 from '../pages/Error404/Error404'
-import Profile from '../pages/Profile/Profile'
+import Landing from '../modules/landing/Landing'
+import Error404 from '../modules/error404/Error404'
+import Profile from '../modules/profile/Profile'
 import Layout from './Layout'
-import SignIn from '../pages/SignIn/SignIn'
+import SignIn from '../modules/signIn/SignIn'
 import RequireAuth from './RequireAuth'
 
 const RouterConfig = () => {

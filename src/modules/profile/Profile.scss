@@ -32,12 +32,12 @@
 
 .notif {
   &__update {
-	position: absolute;
+	position: fixed;
 	top: 10%;
 	right: 2%;
 	font-weight: 600;
-	width: 200px;
-	padding: 0.8rem;
+	width: fit-content;
+	padding: 0.8rem 1.6rem;
 	animation: ease-out 0.3s;
 	animation-name: appears;
 	color: white;

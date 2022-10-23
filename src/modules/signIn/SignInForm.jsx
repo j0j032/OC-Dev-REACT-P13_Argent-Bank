@@ -2,19 +2,24 @@ import {useMutation} from 'react-query'
 import React, {useEffect, useRef} from 'react'
 import {useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
-import useBoolean from '../../../hooks/useBoolean'
-import {setCredentials} from '../../../feature/auth.slice'
-import {login} from '../../../api/identification.requests'
-import useNotification from '../../../hooks/useNotification'
+import useBoolean from '../../hooks/useBoolean'
+import {setCredentials} from '../../feature/auth.slice'
+import {login} from '../../api/identification.requests'
+import useNotification from '../../hooks/useNotification'
+import useForm from '../../hooks/useForm'
+import {delayedBoolean} from '../../utils/delayedBoolean'
 
 const SignInForm = () => {
-	
+	const emailRef = useRef()
+	const navigate = useNavigate()
+	const dispatch = useDispatch()
 	const [rememberSwitch, {setToggle: toggleRemember}] = useBoolean(false)
 	const [errorSwitch, {setFalse: turnErrorOff, setTrue: turnErrorOn}] = useBoolean(false)
-	const dispatch = useDispatch()
-	const navigate = useNavigate()
-	const emailRef = useRef()
-	const pwdRef = useRef()
+	
+	const {formData, handleInputChange, handleSubmit} = useForm({email: '', password: ''},
+		(formData) => connection.mutate(formData)
+	)
+	const {email, password} = formData
 	
 	// set the focus on render
 	useEffect(() => {
@@ -31,10 +36,6 @@ const SignInForm = () => {
 		}
 	}
 	
-	/**
-	 * Actions when user inputs are valid and retrieve in DB
-	 * @param {string} identifier - JWT
-	 */
 	function handleLogin(identifier) {
 		dispatch(setCredentials({accessToken: identifier, loggedIn: true}))
 		redirect()
@@ -44,38 +45,12 @@ const SignInForm = () => {
 		}
 	}
 	
-	/**
-	 * To set the errorSwitch to true and back to false in case of another error happen and
-	 * need to be notified
-	 * @returns {(function(): void)|*}
-	 */
-	const showError = () => {
-		turnErrorOn()
-		const timer = setTimeout(() => {
-			turnErrorOff()
-		}, 200)
-		return () => {
-			clearTimeout(timer)
-		}
-	}
-	
-	// using react-query useMutation hook: https://tanstack.com/query/v4/docs/reference/useMutation
 	const connection = useMutation(login, {
 		onSuccess: (data) => handleLogin(data),
-		onError: () => showError()
+		onError: () => delayedBoolean(turnErrorOn, turnErrorOff, 200)
 	})
 	
-	
-	const handleSubmit = e => {
-		e.preventDefault()
-		connection.mutate({email: emailRef.current.value, password: pwdRef.current.value})
-	}
-	
-	// Hook description in file 'src/hooks/useNotification.jsx'
 	const notifSuccess = useNotification(connection.isSuccess, 3000)
-	
-	//Listen a boolean in case of multi error in a row
-	// (if using connection.isError, notification will display only once)
 	const notifError = useNotification(errorSwitch, 3000)
 	
 	return (
@@ -84,9 +59,10 @@ const SignInForm = () => {
 				<div className='input__wrapper'>
 					<label htmlFor='email'>Email</label>
 					<input type='email'
-					       id='email'
 					       name='email'
 					       ref={emailRef}
+					       value={email}
+					       onChange={handleInputChange}
 					       autoComplete='off'
 					       required
 					/>
@@ -95,8 +71,9 @@ const SignInForm = () => {
 				<div className='input__wrapper'>
 					<label htmlFor='password'>Password</label>
 					<input type='password'
-					       id='password'
-					       ref={pwdRef}
+					       name='password'
+					       value={password}
+					       onChange={handleInputChange}
 					       required
 					/>
 				</div>

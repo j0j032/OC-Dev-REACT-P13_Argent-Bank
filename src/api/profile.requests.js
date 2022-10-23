@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:3001/api/v1'
 const profileUrl = `${API_URL}/user/profile`
 
 // To check errors (development env)
-//const BADProfileUrl = `${API_URL}/user/profilee`
+// const BADProfileUrl = `${API_URL}/user/profilee`
 
 
 /**
@@ -18,12 +18,12 @@ const getUserProfile = token => post(profileUrl, {}, {headers: {'Authorization':
  * To update User Names (first && || last)
  * @param {Object} userData - the object has to contain {firstname, lastname}
  * @example const newUserData = {
- * 			'firstName': firstName?.length > 0 ? firstName : user.firstName,
- * 			'lastName': lastName?.length > 0 ? lastName : user.lastName
+ * 			'firstName': user.firstName,
+ * 			'lastName': user.lastName
  * 		}
  * @param {String} token - user authentification token
  * @returns {Promise<AxiosResponse<any>>}
  */
-const updateUserProfile = (userData, token) => put(profileUrl, userData, {headers: {'Authorization': `Bearer ${token}`}})
+const updateUserNames = (userData, token) => put(profileUrl, userData, {headers: {'Authorization': `Bearer ${token}`}})
 
-export {getUserProfile, updateUserProfile}
+export {getUserProfile, updateUserNames}

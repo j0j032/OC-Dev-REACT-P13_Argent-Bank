@@ -13,8 +13,8 @@ This project is associated with the following [backend](https://github.com/OpenC
 | **Router**         | src/navigation     | 
 | **Redux store**      | src/app      |
 | **Redux Slices**      | src/features     |
-| **Common componnents**      | src/components     |
-| **Pages and related components**      | src/pages      |
+| **Common componnents**      | src/modules/common/components     |
+| **Pages and related components**      | src/modules     |
 
 ---
 
