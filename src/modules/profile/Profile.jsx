@@ -1,34 +1,34 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useCallback, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import Header from '../commons/components/Header/Header'
 import Footer from '../commons/components/Footer/Footer'
-import {useMutation, useQuery} from 'react-query'
+import {useQuery} from 'react-query'
 import {getCurrentState, selectCurrentToken, setCredentials} from '../../feature/auth.slice'
-import Modal from '../commons/components/Modal/Modal'
 import useBoolean from '../../hooks/useBoolean'
 import Accounts from './Accounts/Accounts'
-import {getUserProfile, updateUserProfile} from '../../api/profile.requests'
+import {getUserProfile} from '../../api/profile.requests'
 import Error404 from '../error404/Error404'
 import Loader from '../commons/components/Loader/Loader'
 import useNotification from '../../hooks/useNotification'
-import useDidMountEffect from '../../hooks/useDidMountEffect'
+import EditNamesModal from './EditNamesModal'
 
 const Profile = () => {
 	const dispatch = useDispatch()
 	const currentState = useSelector(getCurrentState)
 	const token = useSelector(selectCurrentToken) || localStorage.getItem('Token')
 	const [modalIsOpen, {setFalse: closeModal, setToggle: toggleModal}] = useBoolean(false)
-	const [firstName, setFirstName] = useState('')
-	const [lastName, setLastName] = useState('')
 	
-	// The DB query using useQuery hook from react-query: https://react-query-v3.tanstack.com/reference/useQuery
 	const {
+		isLoading,
+		isError,
+		isFetched,
 		data: user,
-		isLoading: isLoadingUserData,
-		refetch: updateUserData,
-		isFetched: userDataIsFetched,
-		isError: userDataError
-	} = useQuery(['fetchUserProfile'], () => getUserProfile(token))
+		isRefetching: isUpdating,
+		refetch: handleUpdate
+	} = useQuery(['userInfos'], () => getUserProfile(token), {
+		staleTime: 120_000,
+		retryOnMount: false
+	})
 	
 	const setUser = useCallback((name) => {
 		dispatch(setCredentials({...currentState, user: name, accessToken: token}))
@@ -36,93 +36,42 @@ const Profile = () => {
 	}, [currentState, dispatch, token])
 	
 	useEffect(() => {
-		if (userDataIsFetched) setUser(user.firstName)
+		if (isFetched) setUser(user.firstName)
 	})
 	
-	// The update func using react-query useMutation hook: https://tanstack.com/query/v4/docs/reference/useMutation
-	const {
-		isLoading: isUpdating,
-		mutate: editUserData,
-		isError: isUpdateError,
-		isSuccess: isUpdateSuccess
-	} = useMutation(async (e) => {
-		e.preventDefault()
-		const newUserData = {
-			'firstName': firstName?.length > 0 ? firstName : user.firstName,
-			'lastName': lastName?.length > 0 ? lastName : user.lastName
-		}
-		closeModal()
-		await updateUserProfile(newUserData, token)
-		await updateUserData()
-	})
+	const notifUpdated = useNotification(isUpdating, 3000)
 	
-	// Hook description in file 'src/hooks/useDidMountEffect.jsx'
-	useDidMountEffect(() => {
-		setUser(firstName)
-	}, [isUpdateSuccess])
+	const editModal = modalIsOpen && (
+		<EditNamesModal token={token}
+		                userData={user}
+		                setUser={setUser}
+		                closeModal={closeModal}
+		                dataIsFetched={isFetched}
+		                handleUpdate={handleUpdate}
+		/>
+	)
 	
-	// Hook description in file 'src/hooks/useNotification.jsx'
-	const notifError = useNotification(isUpdateError, 3000)
-	const notifUpdated = useNotification(isUpdateSuccess, 3000)
-	
-	if (isUpdating) {
-		return <Loader/>
-	}
-	if (userDataError) {
+	if (isError) {
 		return <Error404/>
 	}
 	
-	// The modal parent is a reusable component. It displays a fade BG layer and takes children
-	const editModal = (
+	return isLoading ? (<Loader/>) : (
 		<>
-			{userDataIsFetched && (
-				<Modal>
-					<section className='modal__updateNames'>
-						<button onClick={closeModal}>X</button>
-						<form onSubmit={editUserData}>
-							<div>
-								<label htmlFor='firstName'>First name:</label>
-								<input onChange={(e) => setFirstName(e.target.value)} id='firstName'
-								       autoFocus={true} type='text'
-								       defaultValue={user.firstName}/>
-							</div>
-							<div>
-								<label htmlFor='lastName'>Last name:</label>
-								<input onChange={(e) => setLastName(e.target.value)} id='lastName'
-								       type='text' defaultValue={user.lastName}/>
-							</div>
-							<button className='profile__btn' type='submit'>VALIDER</button>
-						</form>
-					</section>
-				</Modal>
-			)}
-		</>
-	)
-	
-	return (
-		<>
-			{isLoadingUserData ? (<Loader/>) : (
-				<>
-					<Header/>
-					<main className='profile__mainContainer'>
-						<div className='profile__header'>
-							<h1>Welcome back <br/>{`${user.firstName} ${user.lastName} !`}</h1>
-							<button onClick={toggleModal} className='profile__btn'>Edit Name
-							</button>
-							{modalIsOpen && editModal}
-							{notifUpdated && (<p className='notif__update'>✨ Updated !</p>)}
-							{notifError && (
-								<p className='notif__update notif-error'>⚠️ update failed</p>)}
-						</div>
-						<Accounts/>
-					</main>
-				</>
-			)}
+			<Header/>
+			<main className='profile__mainContainer'>
+				<div className='profile__header'>
+					<h1>Welcome back <br/>{`${user.firstName} ${user.lastName} !`}</h1>
+					<button onClick={toggleModal} className='profile__btn'>Edit Name
+					</button>
+				</div>
+				<Accounts/>
+			</main>
 			<Footer/>
+			{editModal}
+			{notifUpdated && (<p className='notif__update'>✨ Updated !</p>)}
 		</>
 	)
 }
-
 
 export default Profile
 
