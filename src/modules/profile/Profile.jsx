@@ -15,7 +15,7 @@ import EditNamesModal from './EditNamesModal'
 const Profile = () => {
 	const dispatch = useDispatch()
 	const currentState = useSelector(getCurrentState)
-	const token = useSelector(selectCurrentToken) || localStorage.getItem('Token')
+	const token = useSelector(selectCurrentToken)
 	const [modalIsOpen, {setFalse: closeModal, setToggle: toggleModal}] = useBoolean(false)
 	
 	const {
@@ -32,7 +32,6 @@ const Profile = () => {
 	
 	const setUser = useCallback((name) => {
 		dispatch(setCredentials({...currentState, user: name, accessToken: token}))
-		localStorage.setItem('user', name)
 	}, [currentState, dispatch, token])
 	
 	useEffect(() => {
