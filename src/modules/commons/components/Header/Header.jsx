@@ -2,13 +2,7 @@ import React from 'react'
 import logo from '../../../../assets/img/argentBankLogo.png'
 import {NavLink} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
-import {
-	logOut, selectCurrentToken,
-	selectCurrentUser
-} from '../../../../feature/auth.slice'
-import {useQuery} from 'react-query'
-import {getUserProfile} from '../../../../api/profile.requests'
-import {useProfile} from '../../../../hooks/useProfile'
+import {logOut, selectCurrentToken} from '../../../../feature/auth.slice'
 
 const Header = ({firstName}) => {
 	const dispatch = useDispatch()

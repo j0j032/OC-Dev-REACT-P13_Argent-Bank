@@ -9,7 +9,7 @@ const Landing = () => {
 	
 	return (
 		<>
-			<Header/>
+			<Header firstName={'My Profile'}/>
 			<main>
 				<BannerLanding/>
 				<Argument/>

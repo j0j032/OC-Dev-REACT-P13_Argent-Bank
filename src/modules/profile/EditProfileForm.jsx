@@ -1,9 +1,8 @@
-import React from 'react'
-import useFormX from '../../hooks/useFormX'
+import useForm from '../../hooks/useForm'
 
 export const EditProfileForm = ({profile, onSubmit}) => {
 	
-	const {formData, handleInputChange, handleSubmit} = useFormX({
+	const {formData, handleInputChange, handleSubmit} = useForm({
 			firstName: profile.firstName,
 			lastName: profile.lastName
 		},
