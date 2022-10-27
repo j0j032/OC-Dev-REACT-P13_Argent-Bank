@@ -23,7 +23,7 @@ const Header = ({firstName}) => {
 		<div className='header__nav-container--profile'>
 			<NavLink className='header__user-container' to='/profile'>
 				<i className='fa fa-user-circle sign-in-icon'></i>
-				<p className='header__userName'>{firstName}</p>
+				<div className='header__userName'>{firstName}</div>
 			</NavLink>
 			<NavLink onClick={handleLogout} className='header__nav-container'
 			         to={'/'}>

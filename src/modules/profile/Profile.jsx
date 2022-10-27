@@ -2,11 +2,9 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import Header from '../commons/components/Header/Header'
 import Footer from '../commons/components/Footer/Footer'
-import {useMutation, useQueryClient} from 'react-query'
 import {selectCurrentToken} from '../../feature/auth.slice'
 import useBoolean from '../../hooks/useBoolean'
 import Accounts from './Accounts/Accounts'
-import {updateUserNames} from '../../api/profile.requests'
 import Error404 from '../error404/Error404'
 import Modal from '../commons/components/Modal/Modal'
 import {EditProfileForm} from './EditProfileForm'
@@ -36,6 +34,7 @@ const Profile = () => {
 	const notifError = useNotification(errorSwitch, 3000)
 	const notifUpdated = useNotification(isUpdating, 3000)
 	
+	
 	const editModal = (
 		<Modal>
 			<section className='modal__updateNames'>
@@ -48,11 +47,11 @@ const Profile = () => {
 	
 	return isError ? (<Error404/>) : (
 		<>
-			<Header firstName={isLoading ? 'Loading' : user.firstName}/>
+			<Header firstName={isLoading ? null : user.firstName}/>
 			<main className='profile__mainContainer'>
 				<div className='profile__header'>
-					<h1>Welcome
-					    back <br/>{isLoading ? 'Loading' : `${user.firstName} ${user.lastName} !`}
+					<h1>Welcome back <br/>
+						{isLoading ? null : `${user.firstName} ${user.lastName} !`}
 					</h1>
 					<button onClick={toggleModal} className='profile__btn'>Edit Name
 					</button>
