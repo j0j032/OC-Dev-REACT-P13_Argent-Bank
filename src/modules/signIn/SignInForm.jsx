@@ -37,12 +37,8 @@ const SignInForm = () => {
 	}
 	
 	function handleLogin(identifier) {
-		dispatch(setCredentials({accessToken: identifier, loggedIn: true}))
+		dispatch(setCredentials({accessToken: identifier}))
 		redirect()
-		if (rememberSwitch) {
-			const userInfos = {Token: identifier, isConnected: 'true'}
-			for (const prop in userInfos) localStorage.setItem(prop, userInfos[prop])
-		}
 	}
 	
 	const connection = useMutation(login, {
