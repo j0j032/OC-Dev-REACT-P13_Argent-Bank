@@ -6,10 +6,12 @@ import {
 	logOut, selectCurrentToken,
 	selectCurrentUser
 } from '../../../../feature/auth.slice'
+import {useQuery} from 'react-query'
+import {getUserProfile} from '../../../../api/profile.requests'
+import {useProfile} from '../../../../hooks/useProfile'
 
-const Header = () => {
+const Header = ({firstName}) => {
 	const dispatch = useDispatch()
-	const user = useSelector(selectCurrentUser)
 	const token = useSelector(selectCurrentToken)
 	
 	function handleLogout() {
@@ -27,7 +29,7 @@ const Header = () => {
 		<div className='header__nav-container--profile'>
 			<NavLink className='header__user-container' to='/profile'>
 				<i className='fa fa-user-circle sign-in-icon'></i>
-				<p className='header__userName'>{user}</p>
+				<p className='header__userName'>{firstName}</p>
 			</NavLink>
 			<NavLink onClick={handleLogout} className='header__nav-container'
 			         to={'/'}>

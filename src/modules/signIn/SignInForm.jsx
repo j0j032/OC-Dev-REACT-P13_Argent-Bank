@@ -6,7 +6,7 @@ import useBoolean from '../../hooks/useBoolean'
 import {setCredentials} from '../../feature/auth.slice'
 import {login} from '../../api/identification.requests'
 import useNotification from '../../hooks/useNotification'
-import useForm from '../../hooks/useForm'
+import useFormX from '../../hooks/useFormX'
 import {delayedBoolean} from '../../utils/delayedBoolean'
 
 const SignInForm = () => {
@@ -16,7 +16,7 @@ const SignInForm = () => {
 	const [rememberSwitch, {setToggle: toggleRemember}] = useBoolean(false)
 	const [errorSwitch, {setFalse: turnErrorOff, setTrue: turnErrorOn}] = useBoolean(false)
 	
-	const {formData, handleInputChange, handleSubmit} = useForm({email: '', password: ''},
+	const {formData, handleInputChange, handleSubmit} = useFormX({email: '', password: ''},
 		(formData) => connection.mutate(formData)
 	)
 	const {email, password} = formData

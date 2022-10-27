@@ -1,72 +1,68 @@
-import React, {useCallback, useEffect} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import React from 'react'
+import {useSelector} from 'react-redux'
 import Header from '../commons/components/Header/Header'
 import Footer from '../commons/components/Footer/Footer'
-import {useQuery} from 'react-query'
-import {getCurrentState, selectCurrentToken, setCredentials} from '../../feature/auth.slice'
+import {useMutation, useQueryClient} from 'react-query'
+import {selectCurrentToken} from '../../feature/auth.slice'
 import useBoolean from '../../hooks/useBoolean'
 import Accounts from './Accounts/Accounts'
-import {getUserProfile} from '../../api/profile.requests'
+import {updateUserNames} from '../../api/profile.requests'
 import Error404 from '../error404/Error404'
-import Loader from '../commons/components/Loader/Loader'
-import useNotification from '../../hooks/useNotification'
-import EditNamesModal from './EditNamesModal'
+import Modal from '../commons/components/Modal/Modal'
+import {EditProfileForm} from './EditProfileForm'
+import {useProfile} from '../../hooks/useProfile'
 
 const Profile = () => {
-	const dispatch = useDispatch()
 	const token = useSelector(selectCurrentToken)
 	const [modalIsOpen, {setFalse: closeModal, setToggle: toggleModal}] = useBoolean(false)
+	const queryClient = useQueryClient()
 	
+	console.log('render')
 	const {
 		isLoading,
 		isError,
-		isFetched,
-		data: user,
-		isRefetching: isUpdating,
-		refetch: handleUpdate
-	} = useQuery(['userInfos'], () => getUserProfile(token), {
-		staleTime: 120_000,
-		retryOnMount: false
+		data: user
+	} = useProfile(token)
+	
+	const {mutate} = useMutation(async (data) => {
+		await updateUserNames(data, token)
+	}, {
+		onSuccess: () => queryClient.invalidateQueries('profile')
 	})
 	
-	const setUser = useCallback((name) => {
-		dispatch(setCredentials({user: name, accessToken: token}))
-	}, [dispatch, token])
+	const onSubmit = data => {
+		mutate(data)
+		closeModal()
+	}
 	
-	useEffect(() => {
-		if (isFetched) setUser(user.firstName)
-	})
-	
-	const notifUpdated = useNotification(isUpdating, 3000)
-	
-	const editModal = modalIsOpen && (
-		<EditNamesModal token={token}
-		                userData={user}
-		                setUser={setUser}
-		                closeModal={closeModal}
-		                dataIsFetched={isFetched}
-		                handleUpdate={handleUpdate}
-		/>
+	const editModal = (
+		<Modal>
+			<section className='modal__updateNames'>
+				<button onClick={closeModal}>X</button>
+				{user && <EditProfileForm profile={user} onSubmit={onSubmit}/>}
+			</section>
+		</Modal>
 	)
 	
 	if (isError) {
 		return <Error404/>
 	}
 	
-	return isLoading ? (<Loader/>) : (
+	return (
 		<>
-			<Header/>
+			<Header firstName={isLoading ? 'Loading' : user.firstName}/>
 			<main className='profile__mainContainer'>
 				<div className='profile__header'>
-					<h1>Welcome back <br/>{`${user.firstName} ${user.lastName} !`}</h1>
+					<h1>Welcome
+					    back <br/>{isLoading ? 'Loading' : `${user.firstName} ${user.lastName} !`}
+					</h1>
 					<button onClick={toggleModal} className='profile__btn'>Edit Name
 					</button>
 				</div>
 				<Accounts/>
 			</main>
 			<Footer/>
-			{editModal}
-			{notifUpdated && (<p className='notif__update'>✨ Updated !</p>)}
+			{modalIsOpen && user ? editModal : null}
 		</>
 	)
 }

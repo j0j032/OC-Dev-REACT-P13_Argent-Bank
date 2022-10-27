@@ -1,5 +1,5 @@
 import React from 'react'
-import useForm from '../../hooks/useForm'
+import useFormX from '../../hooks/useFormX'
 import useBoolean from '../../hooks/useBoolean'
 import useNotification from '../../hooks/useNotification'
 import Modal from '../commons/components/Modal/Modal'
@@ -38,7 +38,7 @@ const EditNamesModal = ({dataIsFetched, userData, setUser, closeModal, handleUpd
 	
 	const errMsg = serverError ? 'Server Error' : 'Fields are not correctly field'
 	
-	const {formData, handleInputChange, handleSubmit} = useForm({
+	const {formData, handleInputChange, handleSubmit} = useFormX({
 			firstName: dataIsFetched ? userData.firstName : '',
 			lastName: dataIsFetched ? userData.lastName : ''
 		},

@@ -8,7 +8,7 @@ import React, {useState} from 'react'
  *
  * @example
  * -Initialisation:
- * const {formData, handleInputChange, handleSubmit} = useForm({email: '', other:whatever you want},
+ * const {formData, handleInputChange, handleSubmit} = useFormX({email: '', other:whatever you want},
  * 		(formData) => connection.mutate(formData)
  * 	)
  * 	const {email, password} = formData
@@ -25,7 +25,7 @@ import React, {useState} from 'react'
  * 					       required/>
  * 	</form>
  */
-const useForm = (initialState = {}, onSubmit) => {
+const useFormX = (initialState = {}, onSubmit) => {
 	const [formData, setFormData] = useState(initialState)
 	
 	const handleInputChange = (e) => {
@@ -40,4 +40,4 @@ const useForm = (initialState = {}, onSubmit) => {
 	return {formData, handleInputChange, handleSubmit}
 }
 
-export default useForm
+export default useFormX
