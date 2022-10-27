@@ -1,6 +1,7 @@
 import React from 'react'
 import {NavLink} from 'react-router-dom'
 import logo from '../../../../assets/img/argentBankLogo.png'
+import {Spinner} from './Spinner'
 
 const Loader = () => {
 	return (
@@ -9,20 +10,7 @@ const Loader = () => {
 				<NavLink to='/'><img className='header__logo' src={logo} alt='logo'/></NavLink>
 			</header>
 			<div className='lds-centered'>
-				<div className='lds-spinner'>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
+				<Spinner/>
 			</div>
 		</>
 	)
