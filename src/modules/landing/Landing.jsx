@@ -11,7 +11,7 @@ import {selectCurrentToken} from '../../feature/auth.slice'
 const Landing = () => {
 	
 	const token = useSelector(selectCurrentToken)
-	const {status, data: user} = useGetProfile(token, {enabled: false})
+	const {status, data: user} = useGetProfile(token, {enabled: !!token})
 	
 	return (
 		<>
