@@ -49,6 +49,14 @@ const SignInForm = () => {
 	const notifSuccess = useNotification(connection.isSuccess, 3000)
 	const notifError = useNotification(errorSwitch, 3000)
 	
+	function setErrorMessage() {
+		if (connection.error) {
+			if (connection.error.response.status === 400) {
+				return 'Unknown user, verify your email & password'
+			} else return 'Sorry, Network Error'
+		}
+	}
+	
 	return (
 		<>
 			<form onSubmit={handleSubmit} className='signin__form'>
@@ -84,7 +92,7 @@ const SignInForm = () => {
 			</form>
 			{notifSuccess && (<p className='notif__update'>👋 Welcome back ! </p>)}
 			{notifError && (
-				<p className='notif__update notif-error'>{`⚠️ ${connection.error.message ? connection.error.message : 'An error has occurred'}`}</p>)}
+				<p className='notif__update notif-error'>{`⚠️ ${setErrorMessage()}`}</p>)}
 		</>
 	)
 }
