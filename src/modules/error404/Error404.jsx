@@ -1,16 +1,23 @@
 import React, {useEffect} from 'react'
 import logo from '../../assets/img/argentBankLogo.png'
 import {NavLink, useNavigate} from 'react-router-dom'
-import Footer from '../../components/Footer/Footer'
+import Footer from '../commons/components/Footer/Footer'
 import {useDispatch} from 'react-redux'
 import {logOut} from '../../feature/auth.slice'
 
 const Error404 = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+	
+	/**
+	 * This use effect always change pathName to /error404
+	 * If an api error happen on another page like /profile, when this component is rendering,
+	 * the path is automatically replaced
+	 */
 	useEffect(() => {
 		navigate('/error404')
 	}, [navigate])
+	
 	return (
 		<>
 			<div className='ERROR404'>

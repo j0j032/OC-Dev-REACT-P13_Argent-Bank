@@ -6,6 +6,11 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+a {
+  text-decoration: none;
+  color: $dark-green;
+}
+
 #root {
   display: flex;
   flex-direction: column;

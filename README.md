@@ -1,10 +1,31 @@
-# Getting Started with Create React RouterConfig
+# Getting Started <img width="28" alt="Languages Icons" src="https://user-images.githubusercontent.com/100964858/197367146-5ab93711-5353-4b97-8a00-06c2062f4085.png">
 
-This project was bootstrapped with [Create React RouterConfig](https://github.com/facebook/create-react-app).
+This project is associated with the following [backend](https://github.com/OpenClassrooms-Student-Center/Project-10-Bank-API)
+
+---
+
+## Code architecture:
+
+| Functionnalities      | Directories          
+| ------------------- |:-------------:| 
+|Axios requests handler & methods| src/api
+| **Custom Hooks**       | src/hooks|
+| **Router**         | src/navigation     | 
+| **Redux store**      | src/app      |
+| **Redux Slices**      | src/features     |
+| **Common componnents**      | src/modules/common/components     |
+| **Pages and related components**      | src/modules     |
+
+---
+
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm i`
+
+Install depedencies
 
 ### `npm start`
 
@@ -44,40 +65,3 @@ point to the copied scripts so you can tweak them. At this point you're on your 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you
 shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't
 customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in
-the [Create React RouterConfig documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved
-here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved
-here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web RouterConfig
-
-This section has moved
-here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved
-here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved
-here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved
-here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

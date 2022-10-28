@@ -35,14 +35,14 @@
 	
 	> form {
 	  display: flex;
-	  align-items: start;
+	  align-items: flex-start;
 	  flex-direction: column;
 	  color: $dark-bg;
 	  gap: 2.4rem;
 	  
 	  > div {
 		display: flex;
-		align-items: start;
+		align-items: flex-start;
 		flex-direction: column;
 		
 		> label {
