@@ -18,7 +18,7 @@ const Profile = () => {
 	const [errorSwitch, {setFalse: turnErrorOff, setTrue: turnErrorOn}] = useBoolean(false)
 	const token = useSelector(selectCurrentToken)
 	
-	const {isLoading, isError, data: user} = useGetProfile(token)
+	const {isLoading, isError, data: user} = useGetProfile(token, {enabled: true})
 	const {mutate, error: serverError, isLoading: isUpdating} = useUpdateProfile(token)
 	
 	const onSubmit = data => {

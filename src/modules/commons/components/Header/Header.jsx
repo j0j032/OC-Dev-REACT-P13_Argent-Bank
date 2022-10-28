@@ -1,4 +1,3 @@
-import React from 'react'
 import logo from '../../../../assets/img/argentBankLogo.png'
 import {NavLink} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
