@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import {useState} from 'react'
 
 /**
  * Generic use of form: create your initialState, and offer you method on change and on submit.
