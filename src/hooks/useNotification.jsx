@@ -1,5 +1,4 @@
-import {useState} from 'react'
-import useDidMountEffect from './useDidMountEffect'
+import {useEffect, useRef, useState} from 'react'
 
 /**
  * This custom Hook is made to render a notification for an amount of time
@@ -10,17 +9,20 @@ import useDidMountEffect from './useDidMountEffect'
  * @returns {boolean}
  */
 const UseNotification = (deps, delay) => {
+	const didMount = useRef(false)
 	const [visible, setVisible] = useState(false)
 	
-	useDidMountEffect(() => {
-		setVisible(true)
-		const timer = setTimeout(() => {
-			setVisible(false)
-		}, delay)
-		return () => {
-			clearTimeout(timer)
-		}
-	}, [deps])
+	useEffect(() => {
+		if (didMount.current) {
+			setVisible(true)
+			const timer = setTimeout(() => {
+				setVisible(false)
+			}, delay)
+			return () => {
+				clearTimeout(timer)
+			}
+		} else didMount.current = true
+	}, [deps, delay])
 	
 	return visible
 }
