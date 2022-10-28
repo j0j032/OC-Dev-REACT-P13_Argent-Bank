@@ -1,38 +1,41 @@
-.features-container{
+.features-container {
   display: flex;
   justify-content: space-between;
-  align-items: start;
-  gap: 3%;
+  align-items: flex-start;
   padding: 4rem;
-  @include mobile{
-	flex-direction: column;
+  gap: 3%;
+  @include mobile {
 	align-items: center;
-	gap: 3.2rem;
+	flex-direction: column;
 	margin-bottom: 3.2rem;
+	gap: 3.2rem;
   }
 }
 
-.feature{
-  &__item{
+.feature {
+  &__item {
+	width: 30%;
 	margin-top: 3.2rem;
 	text-align: center;
-	width: 30%;
-  @include mobile{
+	@include mobile {
 	  width: 80%;
 	}
-	>h3{
-	  margin-top: 2rem;
+	
+	> h3 {
 	  font-size: 2.4rem;
+	  margin-top: 2rem;
 	}
-	>p{
+	
+	> p {
 	  margin-top: 2rem;
 	}
   }
-  &__icon{
+  
+  &__icon {
 	box-sizing: content-box;
 	width: 100px;
+	padding: 2rem;
 	border: solid 10px $green;
 	border-radius: 100px;
-	padding: 2rem;
   }
 }
